@@ -436,7 +436,7 @@ function updateHeroDate() {
 
 const languageContent = {
   ko: {
-    title: '세련된 로또 추첨 경험',
+    title: '랜덤 로또 스튜디오',
     subtitle:
       '다섯 개의 기본 숫자와 서비스 번호까지, 단일 세트 또는 5세트 추첨을 마음껏 즐겨보세요. 결과는 즉시 저장할 수도 있습니다.',
     drawButton: '추첨 시작',
@@ -456,7 +456,7 @@ const languageContent = {
     weekdaySuffix: '요일',
   },
   en: {
-    title: 'Refined Lotto Drawing Experience',
+    title: 'Random Lotto Studio',
     subtitle:
       'Enjoy drawing either a single set or five sets of numbers, including a bonus ball. Save your outcomes instantly.',
     drawButton: 'Start Draw',
@@ -476,7 +476,7 @@ const languageContent = {
     weekdaySuffix: '',
   },
   ja: {
-    title: '洗練されたロト抽選体験',
+    title: 'ランダムロトスタジオ',
     subtitle:
       '基本5個とサービス番号まで、1セットまたは5セットの抽選を自由に楽しめます。結果はすぐに保存できます。',
     drawButton: '抽選開始',
