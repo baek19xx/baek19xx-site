@@ -13,6 +13,7 @@ const resultsEyebrow = document.getElementById('resultsEyebrow');
 const resultsHeading = document.getElementById('resultsHeading');
 const arenaCaption = document.getElementById('arenaCaption');
 const languageSelect = document.getElementById('languageSelect');
+const collectionZoneEl = document.getElementById('collectionZone');
 
 const NUMBER_MIN = 1;
 const NUMBER_MAX = 45;
@@ -23,6 +24,8 @@ const HOLD_VELOCITY = 1.5;
 const CENTER_COLLISION_RATIO = 0.25;
 const MIN_COLLISION_THRESHOLD = 2;
 const MIN_RELATIVE_SPEED = 0.35;
+const COLLECTION_ZONE_OFFSET_RATIO = 0.82;
+const COLLECTION_ZONE_RADIUS_RATIO = 0.12;
 const NUMBER_COLORS = {
   yellow: {
     key: 'yellow',
@@ -86,6 +89,7 @@ function getLanguageContent() {
 let drawMode = 'single';
 let balls = [];
 let arena = { centerX: 0, centerY: 0, radius: 0 };
+let collectionZone = { centerX: 0, centerY: 0, radius: 0 };
 let animationFrame;
 let velocityScale = BASE_VELOCITY;
 let latestResults = [];
@@ -94,6 +98,7 @@ let isHoldingDraw = false;
 let hasCompletedDraw = false;
 let currentLanguage = languageSelect ? languageSelect.value : 'ko';
 let drawButtonMode = 'idle';
+let collectionState = null;
 
 function pad(num) {
   return String(num).padStart(2, '0');
@@ -111,6 +116,13 @@ function resizeCanvas(preservedHiddenSet = collectHiddenNumbers(latestResults)) 
     centerY: parentHeight / 2,
     radius: Math.max(40, diameter / 2 - 8),
   };
+  const zoneRadius = arena.radius * COLLECTION_ZONE_RADIUS_RATIO;
+  collectionZone = {
+    centerX: arena.centerX,
+    centerY: arena.centerY - arena.radius * COLLECTION_ZONE_OFFSET_RATIO,
+    radius: zoneRadius,
+  };
+  positionCollectionZone();
   initializeBalls(parentWidth, parentHeight, preservedHiddenSet);
 }
 
@@ -124,17 +136,21 @@ function initializeBalls(width, height, hiddenSet = new Set()) {
     const point = randomPointWithinCircle(arena.radius - radius - 2);
     const direction = Math.random() * Math.PI * 2;
     const color = getColorConfig(number);
+    const rawVx = Math.cos(direction) * speed;
+    const rawVy = Math.sin(direction) * speed;
     return {
       number,
       radius,
       x: arena.centerX + point.x,
       y: arena.centerY + point.y,
-      vx: Math.cos(direction) * speed,
-      vy: Math.sin(direction) * speed,
+      vx: rawVx,
+      vy: rawVy,
+      maxSpeed: speed,
       colorKey: color.key,
       color,
       visible: !hiddenSet.has(number),
       opacity: hiddenSet.has(number) ? 0 : 1,
+      collectedDuringHold: false,
     };
   });
 }
@@ -146,6 +162,32 @@ function randomPointWithinCircle(maxRadius) {
     x: Math.cos(angle) * radius,
     y: Math.sin(angle) * radius,
   };
+}
+
+function clampBallSpeed(ball) {
+  if (!ball || !ball.maxSpeed) return;
+  const limit = ball.maxSpeed;
+  if (limit <= 0) return;
+  const currentSpeed = Math.hypot(ball.vx, ball.vy);
+  if (currentSpeed <= limit) return;
+  const scale = limit / currentSpeed;
+  ball.vx *= scale;
+  ball.vy *= scale;
+}
+
+function positionCollectionZone() {
+  if (!collectionZoneEl) return;
+  const diameter = Math.max(0, collectionZone.radius * 2);
+  collectionZoneEl.style.width = `${diameter}px`;
+  collectionZoneEl.style.height = `${diameter}px`;
+  collectionZoneEl.style.left = `${collectionZone.centerX}px`;
+  collectionZoneEl.style.top = `${collectionZone.centerY}px`;
+}
+
+function setCollectionZoneActive(active) {
+  if (!collectionZoneEl) return;
+  collectionZoneEl.classList.toggle('active', active);
+  collectionZoneEl.setAttribute('aria-hidden', active ? 'false' : 'true');
 }
 
 function animate() {
@@ -166,6 +208,9 @@ function updatePosition(ball) {
 
   const targetOpacity = ball.visible ? 1 : 0;
   ball.opacity += (targetOpacity - ball.opacity) * 0.08;
+
+  checkCollectionZoneEntry(ball);
+  clampBallSpeed(ball);
 }
 
 function constrainBallToArena(ball) {
@@ -187,6 +232,8 @@ function constrainBallToArena(ball) {
   const dot = ball.vx * nx + ball.vy * ny;
   ball.vx -= 2 * dot * nx;
   ball.vy -= 2 * dot * ny;
+
+  clampBallSpeed(ball);
 }
 
 function resolveBallCollisions() {
@@ -239,6 +286,9 @@ function resolveBallCollisions() {
       a.vy -= relativeVelocity * ny;
       b.vx += relativeVelocity * nx;
       b.vy += relativeVelocity * ny;
+
+      clampBallSpeed(a);
+      clampBallSpeed(b);
     }
   }
 }
@@ -273,6 +323,14 @@ function collectHiddenNumbers(results) {
   return hidden;
 }
 
+function sortMainNumbers(results) {
+  if (!Array.isArray(results)) return [];
+  return results.map((set) => ({
+    ...set,
+    main: Array.isArray(set.main) ? [...set.main].sort((a, b) => a - b) : [],
+  }));
+}
+
 function revealAllBalls() {
   balls.forEach((ball) => {
     ball.visible = true;
@@ -284,6 +342,111 @@ function applyVisibilityFromResults(results) {
   balls.forEach((ball) => {
     ball.visible = !hiddenSet.has(ball.number);
   });
+}
+
+function resetCollectedBallState(restoreVisibility = true) {
+  balls.forEach((ball) => {
+    if (ball.collectedDuringHold) {
+      ball.collectedDuringHold = false;
+      if (restoreVisibility) {
+        ball.visible = true;
+      }
+    }
+  });
+}
+
+function startCollectionMode() {
+  if (collectionState) return;
+  const setCount = drawMode === 'single' ? 1 : 5;
+  collectionState = {
+    targetSets: setCount,
+    sets: Array.from({ length: setCount }, (_, idx) => ({
+      main: [],
+      service: null,
+      _index: idx + 1,
+    })),
+    currentSetIndex: 0,
+    isComplete: false,
+  };
+  resetCollectedBallState(true);
+  setCollectionZoneActive(true);
+  renderResults(collectionState.sets, { skipStore: true });
+}
+
+function endCollectionMode(options = {}) {
+  if (!collectionState) {
+    setCollectionZoneActive(false);
+    return;
+  }
+  const { restoreVisibility = true, rerender = true } = options;
+  setCollectionZoneActive(false);
+  resetCollectedBallState(restoreVisibility);
+  collectionState = null;
+  if (rerender) {
+    renderResults(latestResults || [], { skipStore: true });
+  }
+}
+
+function checkCollectionZoneEntry(ball) {
+  if (!isHoldingDraw || !collectionState || collectionState.isComplete) return;
+  if (!ball.visible || ball.collectedDuringHold) return;
+  const dx = ball.x - collectionZone.centerX;
+  const dy = ball.y - collectionZone.centerY;
+  const distance = Math.hypot(dx, dy);
+  const effectiveRadius = Math.max(0, collectionZone.radius - ball.radius * 0.25);
+  if (distance <= effectiveRadius) {
+    registerCollectedBall(ball);
+  }
+}
+
+function registerCollectedBall(ball) {
+  if (!collectionState || collectionState.isComplete) return;
+  const set = collectionState.sets[collectionState.currentSetIndex];
+  if (!set) return;
+  ball.visible = false;
+  ball.collectedDuringHold = true;
+
+  if (set.main.length < 5) {
+    set.main.push(ball.number);
+  } else if (typeof set.service !== 'number') {
+    set.service = ball.number;
+  }
+
+  renderResults(collectionState.sets, { skipStore: true });
+
+  if (set.main.length === 5 && typeof set.service === 'number') {
+    collectionState.currentSetIndex += 1;
+    if (collectionState.currentSetIndex >= collectionState.targetSets) {
+      collectionState.isComplete = true;
+      completeCollectionDraw();
+    }
+  }
+}
+
+function completeCollectionDraw() {
+  finalizeCollectionResults({ fromAuto: true });
+}
+
+function buildResultsFromCollection() {
+  if (!collectionState) return [];
+  return collectionState.sets.map((set) => ({
+    main: [...set.main],
+    service: set.service,
+    _index: set._index,
+  }));
+}
+
+function finalizeCollectionResults({ fromAuto = false } = {}) {
+  if (!collectionState || !collectionState.isComplete) return false;
+  if (fromAuto) {
+    cleanupHoldListeners();
+    isHoldingDraw = false;
+    drawBtn.classList.remove('holding');
+  }
+  const finalizedSets = sortMainNumbers(buildResultsFromCollection());
+  finalizeDraw(finalizedSets);
+  endCollectionMode({ restoreVisibility: false, rerender: false });
+  return true;
 }
 
 function generateSingleSet() {
@@ -304,13 +467,20 @@ function generateResults(count) {
   return Array.from({ length: count }, () => generateSingleSet());
 }
 
-function renderResults(resultsArg) {
+function renderResults(resultsArg, options = {}) {
+  const { skipStore = false } = options;
   const content = getLanguageContent();
   const results = Array.isArray(resultsArg) ? resultsArg : latestResults;
-  latestResults = results;
-  if (!results.length) {
+  if (!skipStore) {
+    latestResults = results;
+  }
+  const hasResults = Array.isArray(results) && results.length;
+  if (!hasResults) {
     resultsContainer.classList.add('empty');
     resultsContainer.innerHTML = `<p>${content.emptyMessage}</p>`;
+    if (!skipStore) {
+      latestResults = [];
+    }
     return;
   }
 
@@ -323,21 +493,23 @@ function renderResults(resultsArg) {
 
     const label = document.createElement('p');
     label.className = 'label';
-    label.textContent = `${content.setLabel} ${idx + 1}`;
+    const labelIndex = set._index ?? idx + 1;
+    label.textContent = `${content.setLabel} ${labelIndex}`;
 
     const numbersBox = document.createElement('div');
     numbersBox.className = 'result-numbers';
 
-    set.main.forEach((num) => {
+    (set.main || []).forEach((num) => {
       numbersBox.appendChild(createNumberPill(num));
     });
 
-    const divider = document.createElement('span');
-    divider.className = 'service-divider';
-    divider.textContent = '+';
-    numbersBox.appendChild(divider);
-
-    numbersBox.appendChild(createNumberPill(set.service, true));
+    if (typeof set.service === 'number') {
+      const divider = document.createElement('span');
+      divider.className = 'service-divider';
+      divider.textContent = '+';
+      numbersBox.appendChild(divider);
+      numbersBox.appendChild(createNumberPill(set.service, true));
+    }
 
     wrapper.append(label, numbersBox);
     resultsContainer.appendChild(wrapper);
@@ -368,6 +540,7 @@ function beginDrawHold(event) {
   drawBtn.classList.add('holding');
   revealAllBalls();
   velocityScale = HOLD_VELOCITY;
+  startCollectionMode();
   updateDrawButtonLabel();
   window.addEventListener('pointerup', releaseDrawHold);
   window.addEventListener('pointercancel', cancelDrawHold);
@@ -392,7 +565,14 @@ function releaseDrawHold() {
   cleanupHoldListeners();
   isHoldingDraw = false;
   drawBtn.classList.remove('holding');
-  finalizeDraw();
+  if (collectionState) {
+    if (!finalizeCollectionResults()) {
+      endCollectionMode({ restoreVisibility: true });
+      finalizeDraw();
+    }
+  } else {
+    finalizeDraw();
+  }
 }
 
 function cancelDrawHold() {
@@ -403,6 +583,9 @@ function cancelDrawHold() {
   drawButtonMode = 'idle';
   velocityScale = BASE_VELOCITY;
   updateDrawButtonLabel();
+  if (collectionState) {
+    endCollectionMode({ restoreVisibility: true });
+  }
 }
 
 function cleanupHoldListeners() {
@@ -410,16 +593,24 @@ function cleanupHoldListeners() {
   window.removeEventListener('pointercancel', cancelDrawHold);
 }
 
-function finalizeDraw() {
+function finalizeDraw(resultsOverride = null) {
   drawButtonMode = 'preparing';
   updateDrawButtonLabel();
   drawBtn.disabled = true;
 
   const setCount = drawMode === 'single' ? 1 : 5;
-  const results = generateResults(setCount);
+  const results =
+    Array.isArray(resultsOverride) && resultsOverride.length
+      ? resultsOverride
+      : generateResults(setCount);
+
+  const sortedResults = sortMainNumbers(results);
+  finalizeDrawWithResults(sortedResults);
+}
+
+function finalizeDrawWithResults(results) {
   renderResults(results);
   applyVisibilityFromResults(results);
-
   velocityScale = BASE_VELOCITY;
   drawBtn.disabled = false;
   hasCompletedDraw = true;
@@ -500,7 +691,7 @@ const languageContent = {
     holdPrompt: '손을 떼면 추첨이 시작됩니다',
     preparingText: '추첨 준비 중...',
     saveButton: '결과 저장',
-    meta: '버튼을 누르고 있다가 손을 떼면 추첨 결과가 나옵니다.',
+    meta: '버튼을 누른 채 12시 수집 존에 닿은 공은 즉시 집계되고, 손을 떼면 남은 번호가 한 번에 완성됩니다.',
     resultsLabel: '이번 라운드 결과',
     resultsEyebrow: 'RESULTS',
     arenaCaption: '빠르게 튀어다니는 공에서 번호가 사라지면 추첨 결과에 포함된 것입니다.',
@@ -520,7 +711,7 @@ const languageContent = {
     holdPrompt: 'Release to draw',
     preparingText: 'Preparing draw...',
     saveButton: 'Save Results',
-    meta: 'Hold the button and release to reveal the results instantly.',
+    meta: 'Hold the button and guide balls through the 12 o’clock collection zone; releasing fills any remaining slots instantly.',
     resultsLabel: 'Results of this round',
     resultsEyebrow: 'RESULTS',
     arenaCaption: 'Balls that fade out have been captured for the draw results.',
@@ -540,7 +731,7 @@ const languageContent = {
     holdPrompt: '指を離すと抽選します',
     preparingText: '抽選を準備中...',
     saveButton: '結果を保存',
-    meta: 'ボタンを押したまま指を離すと、その場で抽選結果が表示されます。',
+    meta: 'ボタンを押しながら12時方向の収集ゾーンに触れたボールは順次記録され、指を離すと残りが一気に完成します。',
     resultsLabel: '今回の結果',
     resultsEyebrow: '結果',
     arenaCaption: '光が消えたボールは抽選結果に含まれています。',

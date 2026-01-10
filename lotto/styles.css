@@ -214,6 +214,23 @@ body {
   display: block;
 }
 
+.collection-zone {
+  position: absolute;
+  pointer-events: none;
+  border: 2px dashed rgba(97, 255, 202, 0.7);
+  background: radial-gradient(circle, rgba(97, 255, 202, 0.25), rgba(97, 255, 202, 0.05));
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 0 18px rgba(97, 255, 202, 0.35);
+}
+
+.collection-zone.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
 .orb-glow {
   position: absolute;
   inset: 0;
