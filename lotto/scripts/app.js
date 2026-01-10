@@ -20,6 +20,9 @@ const BALL_COUNT = NUMBER_MAX;
 const SPEED_MULTIPLIER = 10;
 const BASE_VELOCITY = 0.35;
 const HOLD_VELOCITY = 1.5;
+const CENTER_COLLISION_RATIO = 0.25;
+const MIN_COLLISION_THRESHOLD = 2;
+const MIN_RELATIVE_SPEED = 0.35;
 const NUMBER_COLORS = {
   yellow: {
     key: 'yellow',
@@ -148,10 +151,9 @@ function randomPointWithinCircle(maxRadius) {
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  balls.forEach((ball) => {
-    updatePosition(ball);
-    renderBall(ball);
-  });
+  balls.forEach(updatePosition);
+  resolveBallCollisions();
+  balls.forEach(renderBall);
 
   animationFrame = requestAnimationFrame(animate);
 }
@@ -185,6 +187,60 @@ function constrainBallToArena(ball) {
   const dot = ball.vx * nx + ball.vy * ny;
   ball.vx -= 2 * dot * nx;
   ball.vy -= 2 * dot * ny;
+}
+
+function resolveBallCollisions() {
+  for (let i = 0; i < balls.length; i += 1) {
+    const a = balls[i];
+    if (!a.visible && a.opacity < 0.05) continue;
+
+    for (let j = i + 1; j < balls.length; j += 1) {
+      const b = balls[j];
+      if (!b.visible && b.opacity < 0.05) continue;
+
+      let dx = b.x - a.x;
+      let dy = b.y - a.y;
+      let distance = Math.hypot(dx, dy);
+      const threshold = Math.max(
+        MIN_COLLISION_THRESHOLD,
+        Math.min(a.radius, b.radius) * CENTER_COLLISION_RATIO
+      );
+
+      if (distance >= threshold || threshold <= 0) continue;
+
+      if (distance === 0) {
+        const angle = Math.random() * Math.PI * 2;
+        dx = Math.cos(angle) * threshold;
+        dy = Math.sin(angle) * threshold;
+        distance = threshold;
+      }
+
+      const nx = dx / distance;
+      const ny = dy / distance;
+
+      const midpointX = (a.x + b.x) / 2;
+      const midpointY = (a.y + b.y) / 2;
+      const halfSeparation = threshold / 2;
+
+      a.x = midpointX - nx * halfSeparation;
+      a.y = midpointY - ny * halfSeparation;
+      b.x = midpointX + nx * halfSeparation;
+      b.y = midpointY + ny * halfSeparation;
+
+      const dvx = a.vx - b.vx;
+      const dvy = a.vy - b.vy;
+      let relativeVelocity = dvx * nx + dvy * ny;
+
+      if (relativeVelocity > -MIN_RELATIVE_SPEED) {
+        relativeVelocity = -MIN_RELATIVE_SPEED;
+      }
+
+      a.vx -= relativeVelocity * nx;
+      a.vy -= relativeVelocity * ny;
+      b.vx += relativeVelocity * nx;
+      b.vy += relativeVelocity * ny;
+    }
+  }
 }
 
 function renderBall(ball) {
