@@ -56,7 +56,6 @@ const collectionZoneEl = document.getElementById('collectionZone');
 const duplicateToggleEl = document.getElementById('duplicateToggle');
 const duplicateToggleBtn = document.getElementById('duplicateToggleBtn');
 const duplicateToggleLabelEl = document.getElementById('duplicateToggleLabel');
-const duplicateToggleHelperEl = document.getElementById('duplicateToggleHelper');
 
 const NUMBER_MIN = 1;
 const NUMBER_MAX = 45;
@@ -142,7 +141,7 @@ let hasCompletedDraw = false;
 let currentLanguage = languageSelect ? languageSelect.value : 'ko';
 let drawButtonMode = 'idle';
 let collectionState = null;
-let allowDuplicateSets = false;
+let allowDuplicateSets = true;
 
 function pad(num) {
   return String(num).padStart(2, '0');
@@ -767,7 +766,7 @@ function syncDuplicateToggleState() {
   if (!duplicateToggleEl || !duplicateToggleBtn) return;
   const content = getLanguageContent();
   const enabled = drawMode === 'multi';
-  const pressed = enabled && allowDuplicateSets;
+  const pressed = enabled ? allowDuplicateSets : false;
 
   duplicateToggleEl.classList.toggle('disabled', !enabled);
   duplicateToggleEl.classList.toggle('active', pressed);
@@ -779,11 +778,6 @@ function syncDuplicateToggleState() {
 
   if (duplicateToggleLabelEl) {
     duplicateToggleLabelEl.textContent = content.duplicateLabel || '';
-  }
-  if (duplicateToggleHelperEl) {
-    duplicateToggleHelperEl.textContent = enabled
-      ? content.duplicateHelperEnabled || ''
-      : content.duplicateHelperDisabled || '';
   }
 }
 
@@ -974,9 +968,7 @@ const languageContent = {
     setLabel: '세트',
     singleSet: '1 세트',
     multiSet: '5 세트',
-    duplicateLabel: '5세트 번호 중복 허용',
-    duplicateHelperEnabled: '세트마다 번호 풀을 초기화해 중복을 허용합니다.',
-    duplicateHelperDisabled: '5세트 모드에서 사용 가능합니다.',
+    duplicateLabel: '5세트 세트마다 번호 중복 허용',
     languageLabel: '언어 선택',
     controlsAriaLabel: '추첨 제어',
     modeAriaLabel: '추첨 모드 선택',
