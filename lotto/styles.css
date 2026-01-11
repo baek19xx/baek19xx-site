@@ -159,10 +159,15 @@ select {
   display: flex;
   gap: 16px;
   align-items: stretch;
-  background: var(--surface);
+  background: rgba(6, 14, 28, 0.65);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 16px 20px;
+  width: 100%;
+}
+
+.arena-wrapper .controls-strip {
+  max-width: 420px;
 }
 
 .mode-block {
@@ -183,7 +188,7 @@ select {
 
 .experience-layout {
   display: grid;
-  grid-template-columns: minmax(320px, 420px) 1fr;
+  grid-template-columns: minmax(320px, 420px) minmax(320px, 1fr);
   gap: 24px;
   align-items: stretch;
   width: 100%;
@@ -261,6 +266,7 @@ select {
 .side-panel {
   flex: 1;
   display: flex;
+  align-items: stretch;
 }
 
 .mode-control .label {
@@ -270,21 +276,9 @@ select {
 }
 
 .mode-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 8px;
-  position: relative;
-}
-
-.mode-buttons::after {
-  content: '';
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: calc(50% - 0.5px);
-  width: 1px;
-  background: var(--border);
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .mode-btn {
@@ -340,6 +334,7 @@ select {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+  white-space: nowrap;
 }
 
 .action-btn {
@@ -382,6 +377,7 @@ select {
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .results-panel header {

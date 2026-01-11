@@ -40,6 +40,17 @@ const contactDocsList = document.getElementById('contactDocsList');
 const footerTagline = document.getElementById('footerTagline');
 const footerLegalNote = document.getElementById('footerLegalNote');
 const footerYearEl = document.getElementById('footerYear');
+const navLinks = {
+  info: document.querySelector('[data-nav="info"]'),
+  responsible: document.querySelector('[data-nav="responsible"]'),
+  odds: document.querySelector('[data-nav="odds"]'),
+  policy: document.querySelector('[data-nav="policy"]'),
+  contact: document.querySelector('[data-nav="contact"]'),
+};
+const controlsStripEl = document.querySelector('.controls-strip');
+const modeButtonsGroup = document.querySelector('.mode-buttons');
+const footerLinksEl = document.querySelector('.footer-links');
+const languageLabelEl = document.querySelector('label[for="languageSelect"]');
 const languageSelect = document.getElementById('languageSelect');
 const collectionZoneEl = document.getElementById('collectionZone');
 
@@ -866,7 +877,7 @@ const languageContent = {
       '다섯 개의 기본 숫자와 서비스 번호까지, 단일 세트 또는 5세트 추첨을 마음껏 즐겨보세요. 결과는 즉시 저장할 수도 있습니다.',
     drawButton: '추첨 시작',
     redrawButton: '다시 추첨',
-    holdPrompt: '손을 떼면 추첨이 시작됩니다',
+    holdPrompt: '추첨 중...',
     preparingText: '추첨 준비 중...',
     saveButton: '결과 저장',
     meta: '버튼을 누른 채 12시 방향 수집 존에 닿은 공은 즉시 집계되고, 손을 떼면 남은 번호가 한 번에 완성됩니다.',
@@ -878,6 +889,17 @@ const languageContent = {
     setLabel: '세트',
     singleSet: '1 세트',
     multiSet: '5 세트',
+    languageLabel: '언어 선택',
+    controlsAriaLabel: '추첨 제어',
+    modeAriaLabel: '추첨 모드 선택',
+    footerLinksLabel: '푸터 탐색',
+    navLinks: {
+      info: '소개',
+      responsible: '책임 이용',
+      odds: '확률',
+      policy: '정책',
+      contact: '문의',
+    },
     weekdayNames: ['일', '월', '화', '수', '목', '금', '토'],
     weekdaySuffix: '요일',
     infoEyebrow: 'ABOUT',
@@ -951,7 +973,7 @@ const languageContent = {
       'Enjoy drawing either a single set or five sets of numbers, including a bonus ball. Save your outcomes instantly.',
     drawButton: 'Start Draw',
     redrawButton: 'Draw Again',
-    holdPrompt: 'Release to draw',
+    holdPrompt: 'Drawing...',
     preparingText: 'Preparing draw...',
     saveButton: 'Save Results',
     meta: 'Hold the button and guide balls through the 12 o’clock collection zone; releasing fills any remaining slots instantly.',
@@ -962,6 +984,17 @@ const languageContent = {
     setLabel: 'Set',
     singleSet: '1 Set',
     multiSet: '5 Sets',
+    languageLabel: 'Choose language',
+    controlsAriaLabel: 'Draw controls',
+    modeAriaLabel: 'Select draw mode',
+    footerLinksLabel: 'Footer navigation',
+    navLinks: {
+      info: 'Overview',
+      responsible: 'Responsible Play',
+      odds: 'Odds',
+      policy: 'Policy',
+      contact: 'Contact',
+    },
     weekdayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     weekdaySuffix: '',
     infoEyebrow: 'ABOUT',
@@ -1035,7 +1068,7 @@ const languageContent = {
       '基本5個とサービス番号まで、1セットまたは5セットの抽選を自由に楽しめます。結果はすぐに保存できます。',
     drawButton: '抽選開始',
     redrawButton: 'もう一度抽選',
-    holdPrompt: '指を離すと抽選します',
+    holdPrompt: '抽選中...',
     preparingText: '抽選を準備中...',
     saveButton: '結果を保存',
     meta: 'ボタンを押しながら12時方向の収集ゾーンに触れたボールは順次記録され、指を離すと残りが一気に完成します。',
@@ -1047,6 +1080,17 @@ const languageContent = {
     setLabel: 'セット',
     singleSet: '1 セット',
     multiSet: '5 セット',
+    languageLabel: '言語を選択',
+    controlsAriaLabel: '抽選コントロール',
+    modeAriaLabel: 'モード選択',
+    footerLinksLabel: 'フッターナビゲーション',
+    navLinks: {
+      info: '紹介',
+      responsible: '責任ある利用',
+      odds: '確率',
+      policy: 'ポリシー',
+      contact: 'お問い合わせ',
+    },
     weekdayNames: ['日', '月', '火', '水', '木', '金', '土'],
     weekdaySuffix: '曜',
     infoEyebrow: 'ABOUT',
