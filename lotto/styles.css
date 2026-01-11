@@ -439,6 +439,7 @@ select {
   background: linear-gradient(135deg, #61ffca, #2dd7ff);
   color: #04121a;
   box-shadow: 0 12px 24px rgba(0, 255, 214, 0.25);
+  touch-action: none;
 }
 
 .action-btn.holding {

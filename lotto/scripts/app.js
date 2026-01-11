@@ -124,6 +124,74 @@ function getColorKeyForNumber(number) {
   return 'green';
 }
 
+function fillMissingNumbersFromPool(set, pool) {
+  if (!set || !Array.isArray(pool)) return;
+  while (set.main.length < 6 && pool.length) {
+    const value = drawFromPool(pool);
+    if (typeof value === 'number') {
+      set.main.push(value);
+    }
+  }
+  set.main.sort((a, b) => a - b);
+  if (typeof set.service !== 'number' && pool.length) {
+    set.service = drawFromPool(pool);
+  }
+}
+
+function buildPoolForSet(set) {
+  const used = new Set(set.main || []);
+  if (typeof set.service === 'number') {
+    used.add(set.service);
+  }
+  return createNumberPool(used);
+}
+
+function createNumberPool(exclusions = new Set()) {
+  const pool = [];
+  for (let value = NUMBER_MIN; value <= NUMBER_MAX; value += 1) {
+    if (!exclusions.has(value)) {
+      pool.push(value);
+    }
+  }
+  return pool;
+}
+
+function collectUsedNumbersFromSets(sets = []) {
+  const used = new Set();
+  sets.forEach((set) => {
+    (set.main || []).forEach((num) => used.add(num));
+    if (typeof set.service === 'number') {
+      used.add(set.service);
+    }
+  });
+  return used;
+}
+
+function autoCompleteCollectionSets() {
+  if (!collectionState || !Array.isArray(collectionState.sets)) return false;
+  const { sets, allowDuplicates, targetSets } = collectionState;
+  const useSharedPool = targetSets > 1 && !allowDuplicates;
+  if (useSharedPool) {
+    const used = collectUsedNumbersFromSets(sets);
+    const pool = createNumberPool(used);
+    sets.forEach((set) => {
+      if (set.main.length === 6 && typeof set.service === 'number') return;
+      fillMissingNumbersFromPool(set, pool);
+    });
+  } else {
+    sets.forEach((set) => {
+      if (set.main.length === 6 && typeof set.service === 'number') return;
+      const pool = buildPoolForSet(set);
+      fillMissingNumbersFromPool(set, pool);
+    });
+  }
+  const allComplete = sets.every((set) => set.main.length === 6 && typeof set.service === 'number');
+  if (allComplete) {
+    collectionState.isComplete = true;
+  }
+  return allComplete;
+}
+
 function getColorConfig(number) {
   const key = getColorKeyForNumber(number);
   return NUMBER_COLORS[key] || NUMBER_COLORS.yellow;
@@ -147,6 +215,7 @@ let currentLanguage = languageSelect ? languageSelect.value : 'ko';
 let drawButtonMode = 'idle';
 let collectionState = null;
 let allowDuplicateSets = true;
+let activePointerId = null;
 
 function pad(num) {
   return String(num).padStart(2, '0');
@@ -828,7 +897,20 @@ function handleModeChange(targetMode) {
 function beginDrawHold(event) {
   if (drawBtn.disabled || isHoldingDraw) return;
   if (event.type === 'pointerdown' && event.pointerType === 'mouse' && event.button !== 0) return;
+  if (event.cancelable) {
+    event.preventDefault();
+  }
   isHoldingDraw = true;
+  if (event.pointerId !== undefined && drawBtn.setPointerCapture) {
+    activePointerId = event.pointerId;
+    try {
+      drawBtn.setPointerCapture(activePointerId);
+    } catch (_) {
+      activePointerId = null;
+    }
+  } else {
+    activePointerId = null;
+  }
   drawButtonMode = 'holding';
   drawBtn.classList.add('holding');
   revealAllBalls();
@@ -838,7 +920,6 @@ function beginDrawHold(event) {
   window.addEventListener('pointerup', releaseDrawHold);
   window.addEventListener('pointercancel', cancelDrawHold);
 }
-
 function handleDrawKeyDown(event) {
   if (event.code === 'Space' || event.code === 'Enter') {
     event.preventDefault();
@@ -855,14 +936,22 @@ function handleDrawKeyUp(event) {
 
 function releaseDrawHold() {
   if (!isHoldingDraw) return;
+  if (activePointerId !== null && drawBtn.releasePointerCapture) {
+    try {
+      drawBtn.releasePointerCapture(activePointerId);
+    } catch (_) {
+      // ignore
+    }
+    activePointerId = null;
+  }
   cleanupHoldListeners();
   isHoldingDraw = false;
   drawBtn.classList.remove('holding');
   if (collectionState) {
-    if (!finalizeCollectionResults()) {
-      endCollectionMode({ restoreVisibility: true });
-      finalizeDraw();
+    if (!collectionState.isComplete) {
+      autoCompleteCollectionSets({ forceComplete: true });
     }
+    finalizeCollectionResults();
   } else {
     finalizeDraw();
   }
@@ -870,15 +959,7 @@ function releaseDrawHold() {
 
 function cancelDrawHold() {
   if (!isHoldingDraw) return;
-  cleanupHoldListeners();
-  isHoldingDraw = false;
-  drawBtn.classList.remove('holding');
-  drawButtonMode = 'idle';
-  velocityScale = BASE_VELOCITY;
-  updateDrawButtonLabel();
-  if (collectionState) {
-    endCollectionMode({ restoreVisibility: true });
-  }
+  releaseDrawHold();
 }
 
 function cleanupHoldListeners() {
