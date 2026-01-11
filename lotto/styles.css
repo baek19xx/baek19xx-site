@@ -92,6 +92,14 @@ select {
     align-items: flex-start;
     gap: 8px;
   }
+
+  .option-toggle {
+    padding: 12px 14px;
+  }
+
+  .toggle-label {
+    font-size: 0.85rem;
+  }
 }
 
 .accent-number {
@@ -305,7 +313,7 @@ select {
 }
 
 .toggle-label {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text);
 }
 
