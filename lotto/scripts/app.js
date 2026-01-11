@@ -13,6 +13,10 @@ const resultsEyebrow = document.getElementById('resultsEyebrow');
 const resultsHeading = document.getElementById('resultsHeading');
 const resultsDisclaimerEl = document.getElementById('resultsDisclaimer');
 const arenaCaption = document.getElementById('arenaCaption');
+const faqEyebrow = document.getElementById('faqEyebrow');
+const faqHeading = document.getElementById('faqHeading');
+const faqIntro = document.getElementById('faqIntro');
+const faqList = document.getElementById('faqList');
 const infoEyebrow = document.getElementById('infoEyebrow');
 const infoHeading = document.getElementById('infoHeading');
 const infoIntro = document.getElementById('infoIntro');
@@ -45,6 +49,7 @@ const navLinks = {
   responsible: document.querySelector('[data-nav="responsible"]'),
   odds: document.querySelector('[data-nav="odds"]'),
   policy: document.querySelector('[data-nav="policy"]'),
+  faq: document.querySelector('[data-nav="faq"]'),
   contact: document.querySelector('[data-nav="contact"]'),
 };
 const controlsStripEl = document.querySelector('.controls-strip');
@@ -451,6 +456,25 @@ function renderOddsGrid(items = []) {
   });
 }
 
+function renderFaqList(items = []) {
+  if (!faqList) return;
+  faqList.innerHTML = '';
+  const safeItems = Array.isArray(items) ? items : [];
+  safeItems.forEach((item) => {
+    const card = document.createElement('article');
+    card.className = 'faq-item';
+
+    const question = document.createElement('h3');
+    question.textContent = item.question || '';
+
+    const answer = document.createElement('p');
+    answer.textContent = item.answer || '';
+
+    card.append(question, answer);
+    faqList.appendChild(card);
+  });
+}
+
 function renderKeyValueList(listEl, entries = []) {
   if (!listEl) return;
   listEl.innerHTML = '';
@@ -482,6 +506,11 @@ function updateInformationalSections(content) {
   if (infoHeading) infoHeading.textContent = fallbackContent.infoHeading || '';
   if (infoIntro) infoIntro.textContent = fallbackContent.infoIntro || '';
   renderInfoCards(fallbackContent.infoItems || []);
+
+  if (faqEyebrow) faqEyebrow.textContent = fallbackContent.faqEyebrow || '';
+  if (faqHeading) faqHeading.textContent = fallbackContent.faqHeading || '';
+  if (faqIntro) faqIntro.textContent = fallbackContent.faqIntro || '';
+  renderFaqList(fallbackContent.faqItems || []);
 
   if (responsibleEyebrow) {
     responsibleEyebrow.textContent = fallbackContent.responsibleEyebrow || '';
@@ -978,6 +1007,7 @@ const languageContent = {
       responsible: '책임 이용',
       odds: '확률',
       policy: '정책',
+      faq: 'FAQ',
       contact: '문의',
     },
     weekdayNames: ['일', '월', '화', '수', '목', '금', '토'],
@@ -1008,6 +1038,44 @@ const languageContent = {
       { tier: '3등', criteria: '5개 번호 일치', probability: '1 / 35,724 (약 0.0028%)' },
       { tier: '4등', criteria: '4개 번호 일치', probability: '1 / 733 (약 0.136%)' },
       { tier: '5등', criteria: '3개 번호 일치', probability: '1 / 45 (약 2.22%)' },
+    ],
+    faqEyebrow: 'FAQ',
+    faqHeading: '자주 묻는 질문',
+    faqIntro: '시뮬레이터 운용 방식, 데이터 처리, 책임 범위 등에 대해 가장 자주 받는 질문을 정리했습니다.',
+    faqItems: [
+      {
+        question: '이 결과는 과거 로또 당첨·낙첨 데이터를 바탕으로 하나요?',
+        answer: '아니요. Lux Lotto Studio는 매 세트마다 새 번호 풀을 무작위로 생성합니다. 실제 회차 기록이나 외부 통계를 불러오지 않습니다.',
+      },
+      {
+        question: '과거 데이터와 동기화하지 않으면 확률이 달라지지 않나요?',
+        answer:
+          '추첨은 1부터 45까지 모수를 동일하게 유지한 난수 방식이라 실제 로또 수학적 확률과 동일하게 동작합니다. 과거 결과는 참고용으로만 의미가 있습니다.',
+      },
+      {
+        question: '5세트 모드에서 중복 허용을 켜면 실제 회차처럼 집계되나요?',
+        answer:
+          '중복 허용을 켜면 각 세트마다 번호 풀을 초기화하여 동일한 숫자가 여러 세트에 등장할 수 있습니다. 실제 복권 다중 구매와 유사한 확률 흐름을 체험할 수 있도록 설계된 옵션입니다.',
+      },
+      {
+        question: '사용자 데이터나 입력값을 서버에 저장하나요?',
+        answer: '저장하지 않습니다. 추첨 기록은 브라우저 메모리와 로컬 파일에만 머무르며, 서버로 전송되는 개인정보는 없습니다.',
+      },
+      {
+        question: '이 결과를 실제 당첨 근거로 사용하면 책임을 져주나요?',
+        answer:
+          '아니요. 본 서비스는 학습·엔터테인먼트 목적의 시뮬레이터입니다. 실제 복권 구매나 재정적 결정에 따른 책임은 사용자에게 있습니다.',
+      },
+      {
+        question: '서비스 이용에 비용이 드나요?',
+        answer:
+          '기본 기능은 100% 무료입니다. 광고나 유료 아이템을 도입할 계획이 생기면 사전에 명확히 공지할 예정입니다.',
+      },
+      {
+        question: '저장한 결과 파일이 서버로 업로드되거나 공유되나요?',
+        answer:
+          '저장 버튼을 누르면 브라우저가 직접 텍스트 파일을 내려받습니다. 파일은 사용자 기기에만 존재하며, 자동 업로드나 공유 기능은 제공하지 않습니다.',
+      },
     ],
     policyEyebrow: 'POLICY',
     policyHeading: '투명한 운영 약속',
@@ -1081,6 +1149,7 @@ const languageContent = {
       responsible: 'Responsible Play',
       odds: 'Odds',
       policy: 'Policy',
+      faq: 'FAQ',
       contact: 'Contact',
     },
     weekdayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -1111,6 +1180,46 @@ const languageContent = {
       { tier: '3rd Prize', criteria: 'Match 5 numbers', probability: '1 / 35,724 (~0.0028%)' },
       { tier: '4th Prize', criteria: 'Match 4 numbers', probability: '1 / 733 (~0.136%)' },
       { tier: '5th Prize', criteria: 'Match 3 numbers', probability: '1 / 45 (~2.22%)' },
+    ],
+    faqEyebrow: 'FAQ',
+    faqHeading: 'Frequently Asked Questions',
+    faqIntro: 'Learn how the simulator handles data, probabilities, and accountability before you run extended draws.',
+    faqItems: [
+      {
+        question: 'Does the simulator rely on historical winning numbers?',
+        answer:
+          'No. Each draw is generated from a fresh random pool of numbers. We do not import or replay official lottery history.',
+      },
+      {
+        question: 'If no past data is used, are the odds still realistic?',
+        answer:
+          'Yes. The number pool remains 1–45 with uniform probability, so the statistical odds match the official lottery math.',
+      },
+      {
+        question: 'What happens when I enable duplicate sets in 5-set mode?',
+        answer:
+          'Each set resets the pool, so the same number may appear in multiple sets—just like buying several physical tickets.',
+      },
+      {
+        question: 'Do you store any personal data or draw history on your servers?',
+        answer:
+          'No. Results exist only in your browser session and optional text exports. Nothing is uploaded or tracked remotely.',
+      },
+      {
+        question: 'Is Lux Lotto Studio accountable for real-world wins or losses?',
+        answer:
+          'We provide an educational simulator. Financial decisions and actual lottery purchases remain your responsibility.',
+      },
+      {
+        question: 'Is the service free to use?',
+        answer:
+          'Yes. Core features are free. If we ever introduce paid options, we will announce them clearly beforehand.',
+      },
+      {
+        question: 'Are exported logs automatically synced anywhere?',
+        answer:
+          'Exports are simple plain-text files saved locally. You control if and how they are shared.',
+      },
     ],
     policyEyebrow: 'POLICY',
     policyHeading: 'Transparency Pledge',
@@ -1185,6 +1294,7 @@ const languageContent = {
       responsible: '責任ある利用',
       odds: '確率',
       policy: 'ポリシー',
+      faq: 'FAQ',
       contact: 'お問い合わせ',
     },
     weekdayNames: ['日', '月', '火', '水', '木', '金', '土'],
@@ -1214,6 +1324,46 @@ const languageContent = {
       { tier: '3等', criteria: '5個一致', probability: '1 / 35,724 (約0.0028%)' },
       { tier: '4等', criteria: '4個一致', probability: '1 / 733 (約0.136%)' },
       { tier: '5等', criteria: '3個一致', probability: '1 / 45 (約2.22%)' },
+    ],
+    faqEyebrow: 'FAQ',
+    faqHeading: 'よくある質問',
+    faqIntro: 'データの扱い・確率・責任範囲など、運営によく寄せられる質問をまとめています。',
+    faqItems: [
+      {
+        question: '抽選は過去の当選番号をもとに再現していますか？',
+        answer:
+          'いいえ。毎回1〜45のプールをランダムに生成する方式で、公式の当選履歴は取り込みません。',
+      },
+      {
+        question: '履歴データを使わなくても確率は同じですか？',
+        answer:
+          '同じです。常に1〜45の整数を均等に抽選するため、数学的な当選確率は公式ロトと一致します。',
+      },
+      {
+        question: '5セットモードで重複を許可するとどうなりますか？',
+        answer:
+          '各セットごとに番号プールを初期化するため、同じ数字が複数セットに現れることがあります。実際に複数枚購入した場合と近い挙動です。',
+      },
+      {
+        question: 'ユーザーデータをサーバーに保存していますか？',
+        answer:
+          '保存しません。抽選結果はブラウザ内と任意のテキスト保存にのみ存在し、外部へ送信されません。',
+      },
+      {
+        question: '当選や損失に対してサービスが責任を負いますか？',
+        answer:
+          'いいえ。本サービスは学習・エンタメ目的のシミュレーターです。実際の購入や金銭判断はご自身の責任となります。',
+      },
+      {
+        question: 'このサービスは有料ですか？',
+        answer:
+          '基本機能はすべて無料です。有料オプションを導入する際は事前に明確な告知を行います。',
+      },
+      {
+        question: '保存した結果ファイルは自動で共有されますか？',
+        answer:
+          'いいえ。テキストファイルとしてローカルに保存されるだけで、自動送信や共有機能はありません。',
+      },
     ],
     policyEyebrow: 'POLICY',
     policyHeading: '透明性へのコミットメント',
