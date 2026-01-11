@@ -1038,6 +1038,11 @@ const languageContent = {
         href: 'https://docs.google.com/forms/d/e/1FAIpQLSfyPtHya7JUqWoOUq8ok3YVrRoW8YQEfYXdy0zhwsClfEnPLg/viewform?usp=dialog',
         value: 'Google Form 링크',
       },
+      {
+        label: '이메일 문의',
+        href: 'mailto:baek_10090@naver.com',
+        value: 'baek_10090@naver.com',
+      },
     ],
     contactDocs: [
       { label: '이용약관', href: './terms.html' },
@@ -1136,6 +1141,11 @@ const languageContent = {
         href: 'https://docs.google.com/forms/d/e/1FAIpQLSfyPtHya7JUqWoOUq8ok3YVrRoW8YQEfYXdy0zhwsClfEnPLg/viewform?usp=dialog',
         value: 'Google Form',
       },
+      {
+        label: 'Email Support',
+        href: 'mailto:baek_10090@naver.com',
+        value: 'baek_10090@naver.com',
+      },
     ],
     contactDocs: [
       { label: 'Terms of Use', href: './terms.html' },
@@ -1233,6 +1243,11 @@ const languageContent = {
         label: 'お問い合わせフォーム',
         href: 'https://docs.google.com/forms/d/e/1FAIpQLSfyPtHya7JUqWoOUq8ok3YVrRoW8YQEfYXdy0zhwsClfEnPLg/viewform?usp=dialog',
         value: 'Googleフォーム',
+      },
+      {
+        label: 'メール対応',
+        href: 'mailto:baek_10090@naver.com',
+        value: 'baek_10090@naver.com',
       },
     ],
     contactDocs: [
