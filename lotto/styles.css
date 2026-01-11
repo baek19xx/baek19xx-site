@@ -22,6 +22,18 @@ body {
   background: radial-gradient(circle at top, #102040 0%, #05060a 70%);
   color: var(--text);
   font-family: 'Space Grotesk', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  touch-action: manipulation;
+}
+
+input,
+textarea,
+select {
+  user-select: auto;
+  -webkit-user-select: auto;
+  -ms-user-select: auto;
 }
 
 .page-shell {
