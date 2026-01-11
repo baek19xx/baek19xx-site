@@ -50,6 +50,22 @@
               <p class="arena-caption" id="arenaCaption">
                 빠르게 튀어다니는 공에서 번호가 사라지면 추첨 결과에 포함된 것입니다.
               </p>
+              <div class="option-toggle disabled" id="duplicateToggle" role="group" aria-label="추가 옵션">
+                <div class="toggle-copy">
+                  <span class="toggle-label" id="duplicateToggleLabel">중복 번호 허용</span>
+                  <span class="toggle-helper" id="duplicateToggleHelper">5세트 모드에서 사용 가능합니다.</span>
+                </div>
+                <button
+                  type="button"
+                  class="toggle-switch"
+                  id="duplicateToggleBtn"
+                  aria-pressed="false"
+                  aria-label="중복 번호 허용"
+                  disabled
+                >
+                  <span class="toggle-thumb"></span>
+                </button>
+              </div>
               <section class="controls-strip" aria-label="추첨 제어">
                 <div class="mode-block">
                   <div class="mode-buttons" role="group" aria-label="추첨 모드 선택">

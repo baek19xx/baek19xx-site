@@ -263,6 +263,81 @@ select {
   font-size: 0.9rem;
 }
 
+.option-toggle {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.option-toggle.active {
+  border-color: rgba(97, 255, 202, 0.7);
+  background: rgba(97, 255, 202, 0.08);
+}
+
+.option-toggle .toggle-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toggle-label {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.toggle-helper {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.option-toggle.disabled {
+  opacity: 0.5;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.toggle-switch:disabled {
+  cursor: not-allowed;
+}
+
+.toggle-switch.active {
+  background: linear-gradient(135deg, rgba(97, 255, 202, 0.4), rgba(97, 255, 202, 0.15));
+  border-color: rgba(97, 255, 202, 0.7);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch.active .toggle-thumb {
+  transform: translateX(26px);
+}
+
 .side-panel {
   flex: 1;
   display: flex;
@@ -704,18 +779,17 @@ select {
 }
 
 .result-numbers {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) auto auto;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .number-pill {
-  flex: 1;
-  min-width: 0;
-  padding: 4px 0;
+  padding: 6px 10px;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   text-align: center;
   white-space: nowrap;
   display: inline-flex;
@@ -752,14 +826,13 @@ select {
 .number-pill.service {
   background: rgba(245, 166, 35, 0.15);
   color: var(--accent-strong);
-  margin-left: 16px;
 }
 
 .service-divider {
-  flex: 0;
   color: var(--accent-strong);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  text-align: center;
   padding: 0 4px;
 }
 

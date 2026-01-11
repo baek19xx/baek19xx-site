@@ -53,6 +53,10 @@ const footerLinksEl = document.querySelector('.footer-links');
 const languageLabelEl = document.querySelector('label[for="languageSelect"]');
 const languageSelect = document.getElementById('languageSelect');
 const collectionZoneEl = document.getElementById('collectionZone');
+const duplicateToggleEl = document.getElementById('duplicateToggle');
+const duplicateToggleBtn = document.getElementById('duplicateToggleBtn');
+const duplicateToggleLabelEl = document.getElementById('duplicateToggleLabel');
+const duplicateToggleHelperEl = document.getElementById('duplicateToggleHelper');
 
 const NUMBER_MIN = 1;
 const NUMBER_MAX = 45;
@@ -138,6 +142,7 @@ let hasCompletedDraw = false;
 let currentLanguage = languageSelect ? languageSelect.value : 'ko';
 let drawButtonMode = 'idle';
 let collectionState = null;
+let allowDuplicateSets = false;
 
 function pad(num) {
   return String(num).padStart(2, '0');
@@ -201,6 +206,19 @@ function randomPointWithinCircle(maxRadius) {
     x: Math.cos(angle) * radius,
     y: Math.sin(angle) * radius,
   };
+}
+
+function respawnBall(ball) {
+  if (!ball || !arena) return;
+  const maxRadius = Math.max(0, arena.radius - ball.radius - 2);
+  const point = randomPointWithinCircle(maxRadius);
+  const direction = Math.random() * Math.PI * 2;
+  const speed = (0.7 + Math.random() * 0.8) * SPEED_MULTIPLIER;
+  ball.x = arena.centerX + point.x;
+  ball.y = arena.centerY + point.y;
+  ball.vx = Math.cos(direction) * speed;
+  ball.vy = Math.sin(direction) * speed;
+  ball.maxSpeed = speed;
 }
 
 function clampBallSpeed(ball) {
@@ -532,12 +550,17 @@ function applyVisibilityFromResults(results) {
   });
 }
 
-function resetCollectedBallState(restoreVisibility = true) {
+function resetCollectedBallState(restoreVisibility = true, options = {}) {
+  const { respawn = false } = options;
   balls.forEach((ball) => {
     if (ball.collectedDuringHold) {
       ball.collectedDuringHold = false;
       if (restoreVisibility) {
         ball.visible = true;
+        ball.opacity = 1;
+        if (respawn) {
+          respawnBall(ball);
+        }
       }
     }
   });
@@ -555,6 +578,7 @@ function startCollectionMode() {
     })),
     currentSetIndex: 0,
     isComplete: false,
+    allowDuplicates: drawMode === 'multi' && allowDuplicateSets,
   };
   resetCollectedBallState(true);
   setCollectionZoneActive(true);
@@ -594,7 +618,7 @@ function registerCollectedBall(ball) {
   ball.visible = false;
   ball.collectedDuringHold = true;
 
-  if (set.main.length < 5) {
+  if (set.main.length < 6) {
     set.main.push(ball.number);
   } else if (typeof set.service !== 'number') {
     set.service = ball.number;
@@ -602,11 +626,13 @@ function registerCollectedBall(ball) {
 
   renderResults(collectionState.sets, { skipStore: true });
 
-  if (set.main.length === 5 && typeof set.service === 'number') {
+  if (set.main.length === 6 && typeof set.service === 'number') {
     collectionState.currentSetIndex += 1;
     if (collectionState.currentSetIndex >= collectionState.targetSets) {
       collectionState.isComplete = true;
       completeCollectionDraw();
+    } else if (collectionState.allowDuplicates) {
+      resetCollectedBallState(true, { respawn: true });
     }
   }
 }
@@ -637,22 +663,47 @@ function finalizeCollectionResults({ fromAuto = false } = {}) {
   return true;
 }
 
-function generateSingleSet() {
-  const available = Array.from({ length: NUMBER_MAX - NUMBER_MIN + 1 }, (_, idx) => NUMBER_MIN + idx);
+function drawFromPool(pool) {
+  if (!pool || !pool.length) return null;
+  const pickIndex = Math.floor(Math.random() * pool.length);
+  const [value] = pool.splice(pickIndex, 1);
+  return value;
+}
+
+function generateSingleSetFromPool(pool) {
+  if (!pool) {
+    const freshPool = Array.from({ length: NUMBER_MAX - NUMBER_MIN + 1 }, (_, idx) => NUMBER_MIN + idx);
+    return generateSingleSetFromPool(freshPool);
+  }
   const main = [];
-  while (main.length < 5) {
-    const pickIndex = Math.floor(Math.random() * available.length);
-    const value = available.splice(pickIndex, 1)[0];
-    main.push(value);
+  while (main.length < 6 && pool.length) {
+    const value = drawFromPool(pool);
+    if (typeof value === 'number') main.push(value);
   }
   main.sort((a, b) => a - b);
-  const serviceIndex = Math.floor(Math.random() * available.length);
-  const service = available.splice(serviceIndex, 1)[0];
-  return { main, service };
+  const serviceValue = drawFromPool(pool);
+  return { main, service: typeof serviceValue === 'number' ? serviceValue : null };
+}
+
+function generateSingleSet() {
+  const pool = Array.from({ length: NUMBER_MAX - NUMBER_MIN + 1 }, (_, idx) => NUMBER_MIN + idx);
+  return generateSingleSetFromPool(pool);
 }
 
 function generateResults(count) {
-  return Array.from({ length: count }, () => generateSingleSet());
+  const useDuplicates = drawMode === 'multi' && allowDuplicateSets;
+  if (useDuplicates) {
+    return Array.from({ length: count }, (_, idx) => ({
+      ...generateSingleSet(),
+      _index: idx + 1,
+    }));
+  }
+
+  const sharedPool = Array.from({ length: NUMBER_MAX - NUMBER_MIN + 1 }, (_, i) => NUMBER_MIN + i);
+  return Array.from({ length: count }, (_, idx) => ({
+    ...generateSingleSetFromPool(sharedPool),
+    _index: idx + 1,
+  }));
 }
 
 function renderResults(resultsArg, options = {}) {
@@ -712,12 +763,43 @@ function createNumberPill(value, service = false) {
   return pill;
 }
 
+function syncDuplicateToggleState() {
+  if (!duplicateToggleEl || !duplicateToggleBtn) return;
+  const content = getLanguageContent();
+  const enabled = drawMode === 'multi';
+  const pressed = enabled && allowDuplicateSets;
+
+  duplicateToggleEl.classList.toggle('disabled', !enabled);
+  duplicateToggleEl.classList.toggle('active', pressed);
+
+  duplicateToggleBtn.disabled = !enabled;
+  duplicateToggleBtn.classList.toggle('active', pressed);
+  duplicateToggleBtn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  duplicateToggleBtn.setAttribute('aria-label', content.duplicateLabel || '');
+
+  if (duplicateToggleLabelEl) {
+    duplicateToggleLabelEl.textContent = content.duplicateLabel || '';
+  }
+  if (duplicateToggleHelperEl) {
+    duplicateToggleHelperEl.textContent = enabled
+      ? content.duplicateHelperEnabled || ''
+      : content.duplicateHelperDisabled || '';
+  }
+}
+
+function handleDuplicateToggleClick() {
+  if (drawMode !== 'multi') return;
+  allowDuplicateSets = !allowDuplicateSets;
+  syncDuplicateToggleState();
+}
+
 function handleModeChange(targetMode) {
   if (drawMode === targetMode) return;
   drawMode = targetMode;
   modeButtons.forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.mode === drawMode);
   });
+  syncDuplicateToggleState();
 }
 
 function beginDrawHold(event) {
@@ -839,6 +921,9 @@ function bindEvents() {
   drawBtn.addEventListener('keydown', handleDrawKeyDown);
   drawBtn.addEventListener('keyup', handleDrawKeyUp);
   saveBtn.addEventListener('click', handleSave);
+  if (duplicateToggleBtn) {
+    duplicateToggleBtn.addEventListener('click', handleDuplicateToggleClick);
+  }
   if (languageSelect) {
     languageSelect.addEventListener('change', handleLanguageChange);
   }
@@ -889,6 +974,9 @@ const languageContent = {
     setLabel: '세트',
     singleSet: '1 세트',
     multiSet: '5 세트',
+    duplicateLabel: '5세트 번호 중복 허용',
+    duplicateHelperEnabled: '세트마다 번호 풀을 초기화해 중복을 허용합니다.',
+    duplicateHelperDisabled: '5세트 모드에서 사용 가능합니다.',
     languageLabel: '언어 선택',
     controlsAriaLabel: '추첨 제어',
     modeAriaLabel: '추첨 모드 선택',
@@ -984,6 +1072,9 @@ const languageContent = {
     setLabel: 'Set',
     singleSet: '1 Set',
     multiSet: '5 Sets',
+    duplicateLabel: 'Allow duplicates (5-set mode)',
+    duplicateHelperEnabled: 'Resets the number pool each set so duplicates may appear.',
+    duplicateHelperDisabled: 'Enable 5-set mode to use this option.',
     languageLabel: 'Choose language',
     controlsAriaLabel: 'Draw controls',
     modeAriaLabel: 'Select draw mode',
@@ -1080,6 +1171,9 @@ const languageContent = {
     setLabel: 'セット',
     singleSet: '1 セット',
     multiSet: '5 セット',
+    duplicateLabel: '5セット・重複番号を許可',
+    duplicateHelperEnabled: '各セットごとに番号プールを初期化し、重複を許可します。',
+    duplicateHelperDisabled: '5セットモードでのみ利用できます。',
     languageLabel: '言語を選択',
     controlsAriaLabel: '抽選コントロール',
     modeAriaLabel: 'モード選択',
@@ -1175,6 +1269,7 @@ function handleLanguageChange() {
   updateModeButtonLabels();
   updateDrawButtonLabel();
   updateHeroDate();
+  syncDuplicateToggleState();
   renderResults();
 }
 
