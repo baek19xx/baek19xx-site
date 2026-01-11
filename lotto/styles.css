@@ -769,11 +769,17 @@ select {
 
 @media (max-width: 1100px) {
   .experience-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .arena-stack {
     flex: none;
+    justify-content: center;
+  }
+
+  .side-panel {
+    width: 100%;
   }
 }
 
@@ -790,21 +796,75 @@ select {
   .primary-actions {
     flex-direction: column;
   }
-}
 
-@media (max-width: 600px) {
-  .page-shell {
-    padding: 32px 16px 48px;
+  .results-list {
+    grid-template-columns: 1fr;
   }
 
-  .arena-wrapper,
-  .control-panel,
+  .content-section {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: 28px 16px 40px;
+  }
+
+  .controls-strip {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .actions-block {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  .mode-buttons::after,
+  .primary-actions::after {
+    display: none;
+  }
+
   .results-panel {
     padding: 20px;
   }
 
+  .info-grid,
+  .odds-grid,
+  .pillars-list,
+  .policy-columns,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .arena-wrapper,
+  .results-panel {
+    padding: 18px;
+  }
+
+  .content-section {
+    padding: 24px 18px;
+    border-radius: 22px;
+  }
+
+  .results-panel header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
   .arena {
-    width: min(280px, 80vw);
-    height: min(280px, 80vw);
+    width: min(260px, 78vw);
+    height: min(260px, 78vw);
   }
 }

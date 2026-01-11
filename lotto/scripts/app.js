@@ -869,7 +869,7 @@ const languageContent = {
     holdPrompt: '손을 떼면 추첨이 시작됩니다',
     preparingText: '추첨 준비 중...',
     saveButton: '결과 저장',
-    meta: '버튼을 누른 채 12시 수집 존에 닿은 공은 즉시 집계되고, 손을 떼면 남은 번호가 한 번에 완성됩니다.',
+    meta: '버튼을 누른 채 12시 방향 수집 존에 닿은 공은 즉시 집계되고, 손을 떼면 남은 번호가 한 번에 완성됩니다.',
     resultsLabel: '이번 라운드 결과',
     resultsEyebrow: 'RESULTS',
     resultsDisclaimer: '본 서비스는 시뮬레이션이며 금전적 보상을 제공하지 않습니다.',
