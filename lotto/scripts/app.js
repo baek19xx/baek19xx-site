@@ -1132,6 +1132,7 @@ const languageContent = {
     meta: 'Hold the button and guide balls through the 12 o’clock collection zone; releasing fills any remaining slots instantly.',
     resultsLabel: 'Results of this round',
     resultsEyebrow: 'RESULTS',
+    resultsDisclaimer: 'This simulation does not award monetary prizes.',
     arenaCaption: 'Balls that fade out have been captured for the draw results.',
     emptyMessage: 'No draws yet.',
     setLabel: 'Set',
