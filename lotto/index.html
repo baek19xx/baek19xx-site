@@ -86,10 +86,114 @@
               <div id="resultsContainer" class="results-list empty">
                 <p>아직 추첨이 진행되지 않았습니다.</p>
               </div>
+              <p class="results-disclaimer" id="resultsDisclaimer">
+                본 서비스는 시뮬레이션이며 금전적 보상을 제공하지 않습니다.
+              </p>
             </section>
           </div>
         </section>
+
+        <section id="infoSection" class="content-section" aria-labelledby="infoHeading">
+          <header class="section-header">
+            <p class="eyebrow" id="infoEyebrow">ABOUT</p>
+            <h2 id="infoHeading">서비스 소개</h2>
+            <p id="infoIntro">
+              데이터 무결성과 투명한 기록 방식을 바탕으로 로또 추첨 과정을 재현합니다.
+            </p>
+          </header>
+          <div class="info-grid" id="infoGrid"></div>
+        </section>
+
+        <section id="responsibleSection" class="content-section" aria-labelledby="responsibleHeading">
+          <header class="section-header">
+            <p class="eyebrow" id="responsibleEyebrow">RESPONSIBLE PLAY</p>
+            <h2 id="responsibleHeading">책임감 있는 이용 안내</h2>
+            <p id="responsibleIntro">
+              본 서비스는 확률형 게임 경험을 위한 시뮬레이터이며 실제 복권 구매와 금전적 이익을 제공하지 않습니다.
+            </p>
+          </header>
+          <ul class="pillars-list" id="responsibleList" aria-label="책임감 있는 이용 원칙"></ul>
+        </section>
+
+        <section id="oddsSection" class="content-section" aria-labelledby="oddsHeading">
+          <header class="section-header">
+            <p class="eyebrow" id="oddsEyebrow">ODDS</p>
+            <h2 id="oddsHeading">로또 확률 해설</h2>
+            <p id="oddsIntro">
+              각 조합의 난이도와 당첨 확률을 참고해 시뮬레이션 결과를 해석하세요.
+            </p>
+          </header>
+          <div class="odds-grid" id="oddsGrid" role="list"></div>
+        </section>
+
+        <section id="policySection" class="content-section" aria-labelledby="policyHeading">
+          <header class="section-header">
+            <p class="eyebrow" id="policyEyebrow">POLICY</p>
+            <h2 id="policyHeading">투명한 운영 약속</h2>
+            <p id="policyIntro">
+              이용약관, 개인정보 처리, 데이터 보관 정책을 공개하여 신뢰할 수 있는 서비스를 지향합니다.
+            </p>
+          </header>
+          <div class="policy-columns">
+            <article class="policy-card">
+              <h3 id="policyLegalTitle">법적 고지</h3>
+              <ul id="policyLegalList" class="policy-list"></ul>
+            </article>
+            <article class="policy-card">
+              <h3 id="policyPrivacyTitle">개인정보 처리</h3>
+              <ul id="policyPrivacyList" class="policy-list"></ul>
+            </article>
+            <article class="policy-card">
+              <h3 id="policySafetyTitle">서비스 안전</h3>
+              <ul id="policySafetyList" class="policy-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="contactSection" class="content-section" aria-labelledby="contactHeading">
+          <header class="section-header">
+            <p class="eyebrow" id="contactEyebrow">CONTACT</p>
+            <h2 id="contactHeading">문의 및 운영 정보</h2>
+            <p id="contactIntro">
+              운영자 정보와 연락처를 아래에서 확인할 수 있습니다.
+            </p>
+          </header>
+          <div class="contact-grid">
+            <article class="contact-card">
+              <h3 id="contactOpsTitle">운영 정보</h3>
+              <ul id="contactOpsList"></ul>
+            </article>
+            <article class="contact-card">
+              <h3 id="contactSupportTitle">지원 채널</h3>
+              <ul id="contactSupportList"></ul>
+            </article>
+            <article class="contact-card">
+              <h3 id="contactDocsTitle">정책 문서</h3>
+              <ul id="contactDocsList"></ul>
+            </article>
+          </div>
+        </section>
       </main>
+
+      <footer class="site-footer">
+        <div class="footer-meta">
+          <p class="eyebrow">LUX DRAW STUDIO</p>
+          <p id="footerTagline">투명하고 책임감 있는 로또 시뮬레이션을 제공합니다.</p>
+        </div>
+        <div class="footer-links" aria-label="푸터 탐색">
+          <a href="#infoSection">소개</a>
+          <a href="#responsibleSection">책임 이용</a>
+          <a href="#oddsSection">확률</a>
+          <a href="#policySection">정책</a>
+          <a href="#contactSection">문의</a>
+        </div>
+        <p class="footer-note">
+          <span id="footerCopyright">
+            © <span id="footerYear"></span> Lux Lotto Studio.
+          </span>
+          <span id="footerLegalNote">All rights reserved.</span>
+        </p>
+      </footer>
     </div>
 
     <script src="./scripts/app.js"></script>
