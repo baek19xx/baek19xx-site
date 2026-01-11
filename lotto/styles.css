@@ -419,19 +419,7 @@ select {
 
 .primary-actions {
   display: flex;
-  gap: 10px;
-  position: relative;
-}
-
-.primary-actions::after {
-  content: '';
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 50%;
-  width: 1px;
-  background: var(--border);
-  pointer-events: none;
+  width: 100%;
 }
 
 .action-btn,
@@ -502,6 +490,28 @@ select {
   color: var(--muted);
   opacity: 0.75;
   line-height: 1.4;
+}
+
+.results-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.results-actions .ghost-btn {
+  min-width: 180px;
+  max-width: 240px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .results-actions {
+    margin-top: 12px;
+  }
+
+  .results-actions .ghost-btn {
+    max-width: none;
+  }
 }
 
 .results-list {
