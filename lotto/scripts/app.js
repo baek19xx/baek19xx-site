@@ -10,9 +10,20 @@ function scrollToDrawSection() {
   experienceLayoutEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function isDrawSectionInView() {
+  if (!experienceLayoutEl) return false;
+  const rect = experienceLayoutEl.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const topBuffer = Math.min(140, viewportHeight * 0.25);
+  const bottomBuffer = Math.min(160, viewportHeight * 0.3);
+  const topInView = rect.top <= topBuffer;
+  const bottomPastBuffer = rect.bottom >= bottomBuffer;
+  return topInView && bottomPastBuffer;
+}
+
 function handleScrollButtonVisibility() {
   if (!scrollToDrawBtn) return;
-  const shouldShow = window.scrollY > 400;
+  const shouldShow = window.scrollY > 400 && !isDrawSectionInView();
   if (shouldShow === scrollBtnVisible) return;
   scrollBtnVisible = shouldShow;
   scrollToDrawBtn.classList.toggle('visible', shouldShow);
