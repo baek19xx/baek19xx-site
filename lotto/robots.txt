@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://baek19xx.github.io/lotto/sitemap.xml
+Sitemap: https://baek19xx-site-02.pages.dev/sitemap.xml
