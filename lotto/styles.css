@@ -90,6 +90,33 @@ select {
   line-height: 1.4;
 }
 
+.audio-control {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.audio-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.audio-btn {
+  min-width: 110px;
+}
+
+@media (max-width: 600px) {
+  .audio-control {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+}
+
 .primary-nav {
   width: 100%;
   display: flex;

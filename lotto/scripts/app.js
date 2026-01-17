@@ -41,6 +41,9 @@ const contactIntro = document.getElementById('contactIntro');
 const contactOpsList = document.getElementById('contactOpsList');
 const contactSupportList = document.getElementById('contactSupportList');
 const contactDocsList = document.getElementById('contactDocsList');
+const ambientAudio = document.getElementById('ambientAudio');
+const audioToggleBtn = document.getElementById('audioToggle');
+const audioStatusLabel = document.getElementById('audioStatus');
 const footerTagline = document.getElementById('footerTagline');
 const footerLegalNote = document.getElementById('footerLegalNote');
 const footerYearEl = document.getElementById('footerYear');
@@ -52,6 +55,7 @@ const navLinks = {
   faq: document.querySelector('[data-nav="faq"]'),
   contact: document.querySelector('[data-nav="contact"]'),
 };
+const AUDIO_PREFERENCE_KEY = 'luxAudioPreference';
 const controlsStripEl = document.querySelector('.controls-strip');
 const modeButtonsGroup = document.querySelector('.mode-buttons');
 const footerLinksEl = document.querySelector('.footer-links');
@@ -215,10 +219,113 @@ let currentLanguage = languageSelect ? languageSelect.value : 'ko';
 let drawButtonMode = 'idle';
 let collectionState = null;
 let allowDuplicateSets = true;
+let isAudioEnabled = false;
 let activePointerId = null;
+let audioUnlockRegistered = false;
 
 function pad(num) {
   return String(num).padStart(2, '0');
+}
+
+function updateAudioUI(statusMessage) {
+  if (audioToggleBtn) {
+    audioToggleBtn.textContent = isAudioEnabled ? '배경음 끄기' : '배경음 켜기';
+    audioToggleBtn.setAttribute('aria-pressed', isAudioEnabled ? 'true' : 'false');
+  }
+  if (audioStatusLabel) {
+    if (statusMessage) {
+      audioStatusLabel.textContent = statusMessage;
+      return;
+    }
+    audioStatusLabel.textContent = isAudioEnabled ? '배경음 켜짐' : '배경음 꺼짐';
+  }
+}
+
+function persistAudioPreference(value) {
+  try {
+    if (!window.localStorage) return;
+    window.localStorage.setItem(AUDIO_PREFERENCE_KEY, value ? 'on' : 'off');
+  } catch (error) {
+    console.warn('Unable to persist audio preference', error);
+  }
+}
+
+function enableAmbientAudio(options = {}) {
+  const { persist = true } = options;
+  if (!ambientAudio) {
+    isAudioEnabled = false;
+    updateAudioUI();
+    return Promise.resolve();
+  }
+  const attempt = ambientAudio.play();
+  if (!attempt || typeof attempt.then !== 'function') {
+    isAudioEnabled = true;
+    if (persist) persistAudioPreference(true);
+    updateAudioUI();
+    return Promise.resolve();
+  }
+  return attempt
+    .then(() => {
+      isAudioEnabled = true;
+      if (persist) persistAudioPreference(true);
+      updateAudioUI();
+    })
+    .catch((error) => {
+      console.warn('Ambient audio playback blocked', error);
+      isAudioEnabled = false;
+      updateAudioUI('배경음 재생이 차단되었습니다. 화면을 탭한 뒤 다시 시도하세요.');
+      throw error;
+    });
+}
+
+function disableAmbientAudio(options = {}) {
+  const { persist = true } = options;
+  if (!ambientAudio) return;
+  ambientAudio.pause();
+  ambientAudio.currentTime = 0;
+  isAudioEnabled = false;
+  if (persist) persistAudioPreference(false);
+  updateAudioUI();
+}
+
+function handleAudioToggle() {
+  if (isAudioEnabled) {
+    disableAmbientAudio();
+    return;
+  }
+  enableAmbientAudio().catch(() => {
+    // already handled inside enableAmbientAudio
+  });
+}
+
+function scheduleAudioUnlock() {
+  if (audioUnlockRegistered) return;
+  const unlock = () => {
+    enableAmbientAudio().catch(() => {});
+    document.removeEventListener('pointerdown', unlock);
+    document.removeEventListener('keydown', unlock);
+    audioUnlockRegistered = false;
+  };
+  document.addEventListener('pointerdown', unlock, { once: true });
+  document.addEventListener('keydown', unlock, { once: true });
+  audioUnlockRegistered = true;
+}
+
+function loadAudioPreference() {
+  updateAudioUI();
+  let storedPreference = null;
+  try {
+    storedPreference = window.localStorage
+      ? window.localStorage.getItem(AUDIO_PREFERENCE_KEY)
+      : null;
+  } catch (error) {
+    storedPreference = null;
+  }
+  if (storedPreference === 'on') {
+    enableAmbientAudio({ persist: false }).catch(() => {
+      scheduleAudioUnlock();
+    });
+  }
 }
 
 function resizeCanvas(preservedHiddenSet = collectHiddenNumbers(latestResults)) {
@@ -1025,6 +1132,9 @@ function bindEvents() {
   drawBtn.addEventListener('keydown', handleDrawKeyDown);
   drawBtn.addEventListener('keyup', handleDrawKeyUp);
   saveBtn.addEventListener('click', handleSave);
+  if (audioToggleBtn) {
+    audioToggleBtn.addEventListener('click', handleAudioToggle);
+  }
   if (duplicateToggleBtn) {
     duplicateToggleBtn.addEventListener('click', handleDuplicateToggleClick);
   }
@@ -1039,6 +1149,7 @@ function init() {
   resizeCanvas();
   renderResults([]);
   updateHeroDate();
+  loadAudioPreference();
   setFooterYear();
   handleLanguageChange();
   if (!animationFrame) {
