@@ -56,66 +56,33 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+    <body data-page="privacy">
     <div class="page-shell legal-wrapper">
       <div class="legal-heading">
-        <p class="eyebrow">PRIVACY POLICY</p>
-        <h1>Lux Lotto Studio 개인정보 처리방침</h1>
-        <p>사용자의 개인정보 보호를 최우선으로 하며, 최소한의 정보만을 안전하게 처리합니다.</p>
+        <div class="accent-lang legal-lang">
+          <span class="lang-label" aria-hidden="true">한 / A / あ</span>
+          <label class="visually-hidden" for="languageSelect" id="languageSelectLabel">언어 선택</label>
+          <div class="lang-picker">
+            <select id="languageSelect" aria-label="언어 선택">
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </div>
+        </div>
+        <p class="eyebrow" id="legalEyebrow"></p>
+        <h1 id="legalTitle"></h1>
+        <p id="legalIntro"></p>
       </div>
 
-      <section class="legal-body">
-        <h2>1. 수집하는 정보</h2>
-        <p>
-          본 서비스는 회원가입이나 로그인 절차가 없으며, 별도의 개인정보를 서버에 수집하지 않습니다. 로컬 저장소에
-          보관되는 정보는 추첨 결과 텍스트 파일 등 사용자 디바이스 안에만 존재합니다.
-        </p>
+      <section class="legal-body" id="legalBody"></section>
 
-        <h2>2. 정보 이용 목적</h2>
-        <p>
-          로컬에 저장된 결과 파일은 사용자 본인의 기록·연구 목적에 한해 사용됩니다. 운영자는 해당 데이터에 접근하거나
-          제3자와 공유하지 않습니다.
-        </p>
-
-        <h2>3. 쿠키 및 추적 기술</h2>
-        <p>
-          Lux Lotto Studio는 광고·분석 목적으로 쿠키나 외부 추적 스크립트를 사용하지 않습니다. 브라우저 기본 로그를 제외한
-          어떤 접속 기록도 저장하지 않습니다.
-        </p>
-
-        <h2>4. 제3자 제공</h2>
-        <p>
-          사용자의 개인정보를 제3자에게 판매하거나 제공하지 않습니다. 법적 의무에 의해 요구되는 경우에 한해 관계 법령을 준수하여
-          필요한 범위 내에서만 정보를 공개합니다.
-        </p>
-
-        <h2>5. 데이터 보안</h2>
-        <p>
-          서비스 코드와 정적 자산은 버전 관리와 수동 검증을 거쳐 배포됩니다. 로컬 저장 데이터를 보호하기 위해 디바이스 보안 설정을
-          유지하고, 결과 파일을 공유할 때에는 각별한 주의를 기울이시기 바랍니다.
-        </p>
-
-        <h2>6. 이용자의 권리</h2>
-        <p>
-          사용자는 언제든지 브라우저 캐시 및 로컬 저장 데이터를 삭제할 수 있습니다. 서비스 이용 중 문의 사항이 있으면
-          <a href="mailto:baek_10090@naver.com">baek_10090@naver.com</a> 으로 연락해 주세요.
-        </p>
-
-        <h2>7. 정책 변경</h2>
-        <p>
-          개인정보 처리방침이 변경되는 경우 사이트 공지 또는 이메일을 통해 안내합니다. 중요한 변경 사항이 포함될 때에는
-          최소 7일 전에 사전 고지를 진행합니다.
-        </p>
-      </section>
-
-      <p class="doc-back-link"><a href="./index.html">메인 페이지로 돌아가기</a></p>
+      <p class="doc-back-link"><a href="./index.html" id="docBackLink"></a></p>
       <section class="doc-related" aria-label="관련 정책 문서">
-        <p>추가 정책과 책임 이용 가이드는 아래 페이지에서 확인할 수 있습니다.</p>
-        <p>
-          <a href="./terms.html">이용약관</a> ·
-          <a href="./responsible-play.html">Responsible Play 가이드</a>
-        </p>
+        <p id="docRelatedIntro"></p>
+        <p id="docRelatedLinks"></p>
       </section>
     </div>
+    <script defer src="./scripts/legal-i18n.js"></script>
   </body>
 </html>

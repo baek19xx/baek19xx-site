@@ -1,3 +1,17 @@
+function scrollToDrawSection() {
+  const target = document.querySelector('.experience-layout');
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function handleScrollButtonVisibility() {
+  if (!scrollToDrawBtn) return;
+  const shouldShow = window.scrollY > 400;
+  if (shouldShow === scrollBtnVisible) return;
+  scrollBtnVisible = shouldShow;
+  scrollToDrawBtn.classList.toggle('visible', shouldShow);
+}
+
 const canvas = document.getElementById('ballCanvas');
 const ctx = canvas.getContext('2d');
 const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
@@ -28,6 +42,9 @@ const responsibleListEl = document.getElementById('responsibleList');
 const policyEyebrow = document.getElementById('policyEyebrow');
 const policyHeading = document.getElementById('policyHeading');
 const policyIntro = document.getElementById('policyIntro');
+const policyLegalTitle = document.getElementById('policyLegalTitle');
+const policyPrivacyTitle = document.getElementById('policyPrivacyTitle');
+const policySafetyTitle = document.getElementById('policySafetyTitle');
 const policyLegalListEl = document.getElementById('policyLegalList');
 const policyPrivacyListEl = document.getElementById('policyPrivacyList');
 const policySafetyListEl = document.getElementById('policySafetyList');
@@ -38,19 +55,28 @@ const oddsGrid = document.getElementById('oddsGrid');
 const contactEyebrow = document.getElementById('contactEyebrow');
 const contactHeading = document.getElementById('contactHeading');
 const contactIntro = document.getElementById('contactIntro');
+const contactOpsTitle = document.getElementById('contactOpsTitle');
+const contactSupportTitle = document.getElementById('contactSupportTitle');
+const contactDocsTitle = document.getElementById('contactDocsTitle');
 const contactOpsList = document.getElementById('contactOpsList');
 const contactSupportList = document.getElementById('contactSupportList');
 const contactDocsList = document.getElementById('contactDocsList');
+const scrollToDrawBtn = document.getElementById('scrollToDrawBtn');
 const footerTagline = document.getElementById('footerTagline');
 const footerLegalNote = document.getElementById('footerLegalNote');
 const footerYearEl = document.getElementById('footerYear');
+const primaryNav = document.querySelector('.primary-nav');
+const footerDocsEl = document.querySelector('.footer-docs');
 const navLinks = {
-  info: document.querySelector('[data-nav="info"]'),
-  responsible: document.querySelector('[data-nav="responsible"]'),
-  odds: document.querySelector('[data-nav="odds"]'),
-  policy: document.querySelector('[data-nav="policy"]'),
-  faq: document.querySelector('[data-nav="faq"]'),
-  contact: document.querySelector('[data-nav="contact"]'),
+  info: document.querySelectorAll('[data-nav="info"]'),
+  responsible: document.querySelectorAll('[data-nav="responsible"]'),
+  odds: document.querySelectorAll('[data-nav="odds"]'),
+  policy: document.querySelectorAll('[data-nav="policy"]'),
+  faq: document.querySelectorAll('[data-nav="faq"]'),
+  contact: document.querySelectorAll('[data-nav="contact"]'),
+  privacy: document.querySelectorAll('[data-nav="privacy"]'),
+  terms: document.querySelectorAll('[data-nav="terms"]'),
+  responsibleDoc: document.querySelectorAll('[data-nav="responsibleDoc"]'),
 };
 const controlsStripEl = document.querySelector('.controls-strip');
 const modeButtonsGroup = document.querySelector('.mode-buttons');
@@ -61,6 +87,23 @@ const collectionZoneEl = document.getElementById('collectionZone');
 const duplicateToggleEl = document.getElementById('duplicateToggle');
 const duplicateToggleBtn = document.getElementById('duplicateToggleBtn');
 const duplicateToggleLabelEl = document.getElementById('duplicateToggleLabel');
+const LANGUAGE_STORAGE_KEY = 'luxLanguage';
+
+function readStoredLanguage() {
+  try {
+    return localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  } catch (error) {
+    return null;
+  }
+}
+
+function persistLanguagePreference(lang) {
+  try {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+  } catch (error) {
+    /* noop */
+  }
+}
 
 const NUMBER_MIN = 1;
 const NUMBER_MAX = 45;
@@ -211,11 +254,20 @@ let latestResults = [];
 const heroDateEl = document.getElementById('heroDate');
 let isHoldingDraw = false;
 let hasCompletedDraw = false;
-let currentLanguage = languageSelect ? languageSelect.value : 'ko';
+const storedLanguage = readStoredLanguage();
+if (languageSelect && storedLanguage) {
+  const hasOption = Array.from(languageSelect.options).some((option) => option.value === storedLanguage);
+  if (hasOption) {
+    languageSelect.value = storedLanguage;
+  }
+}
+let currentLanguage = storedLanguage || (languageSelect ? languageSelect.value : 'ko');
+document.documentElement.setAttribute('lang', currentLanguage);
 let drawButtonMode = 'idle';
 let collectionState = null;
 let allowDuplicateSets = true;
 let activePointerId = null;
+let scrollBtnVisible = false;
 
 function pad(num) {
   return String(num).padStart(2, '0');
@@ -600,6 +652,9 @@ function updateInformationalSections(content) {
   if (policyEyebrow) policyEyebrow.textContent = fallbackContent.policyEyebrow || '';
   if (policyHeading) policyHeading.textContent = fallbackContent.policyHeading || '';
   if (policyIntro) policyIntro.textContent = fallbackContent.policyIntro || '';
+  if (policyLegalTitle) policyLegalTitle.textContent = fallbackContent.policyLegalTitle || '';
+  if (policyPrivacyTitle) policyPrivacyTitle.textContent = fallbackContent.policyPrivacyTitle || '';
+  if (policySafetyTitle) policySafetyTitle.textContent = fallbackContent.policySafetyTitle || '';
   renderSimpleList(policyLegalListEl, fallbackContent.policyLegal || []);
   renderSimpleList(policyPrivacyListEl, fallbackContent.policyPrivacy || []);
   renderSimpleList(policySafetyListEl, fallbackContent.policySafety || []);
@@ -607,12 +662,36 @@ function updateInformationalSections(content) {
   if (contactEyebrow) contactEyebrow.textContent = fallbackContent.contactEyebrow || '';
   if (contactHeading) contactHeading.textContent = fallbackContent.contactHeading || '';
   if (contactIntro) contactIntro.textContent = fallbackContent.contactIntro || '';
+  if (contactOpsTitle) contactOpsTitle.textContent = fallbackContent.contactOpsTitle || '';
+  if (contactSupportTitle) contactSupportTitle.textContent = fallbackContent.contactSupportTitle || '';
+  if (contactDocsTitle) contactDocsTitle.textContent = fallbackContent.contactDocsTitle || '';
   renderKeyValueList(contactOpsList, fallbackContent.contactOps || []);
   renderKeyValueList(contactSupportList, fallbackContent.contactSupport || []);
   renderLinkList(contactDocsList, fallbackContent.contactDocs || []);
 
   if (footerTagline) footerTagline.textContent = fallbackContent.footerTagline || '';
   if (footerLegalNote) footerLegalNote.textContent = fallbackContent.footerLegalNote || '';
+}
+
+function updateNavigation(content) {
+  if (!content) return;
+  if (primaryNav && content.primaryNavLabel) {
+    primaryNav.setAttribute('aria-label', content.primaryNavLabel);
+  }
+  if (footerLinksEl && content.footerLinksLabel) {
+    footerLinksEl.setAttribute('aria-label', content.footerLinksLabel);
+  }
+  if (footerDocsEl && content.footerDocsLabel) {
+    footerDocsEl.setAttribute('aria-label', content.footerDocsLabel);
+  }
+  const labels = content.navLinks || {};
+  Object.entries(navLinks).forEach(([key, elements]) => {
+    const label = labels[key];
+    if (!label || !elements) return;
+    elements.forEach((element) => {
+      if (element) element.textContent = label;
+    });
+  });
 }
 
 function setFooterYear() {
@@ -1031,6 +1110,10 @@ function bindEvents() {
   if (languageSelect) {
     languageSelect.addEventListener('change', handleLanguageChange);
   }
+  if (scrollToDrawBtn) {
+    scrollToDrawBtn.addEventListener('click', scrollToDrawSection);
+    window.addEventListener('scroll', handleScrollButtonVisibility, { passive: true });
+  }
   window.addEventListener('resize', () => resizeCanvas());
 }
 
@@ -1063,7 +1146,7 @@ const languageContent = {
   ko: {
     title: '랜덤 로또 스튜디오',
     subtitle:
-      '다섯 개의 기본 숫자와 서비스 번호까지, 단일 세트 또는 5세트 추첨을 마음껏 즐겨보세요. 결과는 즉시 저장할 수도 있습니다.',
+      '다섯 개의 기본 숫자와 서비스 번호까지, 단일 세트 또는 5세트 추첨을 마음껏 즐기고 결과는 즉시 저장하세요.',
     drawButton: '추첨 시작',
     redrawButton: '다시 추첨',
     holdPrompt: '추첨 중...',
@@ -1082,14 +1165,19 @@ const languageContent = {
     languageLabel: '언어 선택',
     controlsAriaLabel: '추첨 제어',
     modeAriaLabel: '추첨 모드 선택',
+    primaryNavLabel: '주요 섹션 바로가기',
     footerLinksLabel: '푸터 탐색',
+    footerDocsLabel: '정책 문서 바로가기',
     navLinks: {
       info: '소개',
-      responsible: '책임 이용',
+      responsible: '건강한 이용',
       odds: '확률',
       policy: '정책',
       faq: 'FAQ',
       contact: '문의',
+      privacy: '개인정보 처리방침',
+      terms: '이용약관',
+      responsibleDoc: '건강한 이용 가이드',
     },
     weekdayNames: ['일', '월', '화', '수', '목', '금', '토'],
     weekdaySuffix: '요일',
@@ -1101,14 +1189,14 @@ const languageContent = {
       { title: '다국어 지원', body: '한국어 · 영어 · 일본어 UI와 결과 표기를 동일한 품질로 제공합니다.' },
       { title: '결과 보관', body: '추첨 결과를 정렬된 텍스트 파일로 저장해 기록 관리에 활용할 수 있습니다.' },
     ],
-    responsibleEyebrow: 'RESPONSIBLE PLAY',
-    responsibleHeading: '책임감 있는 이용 안내',
+    responsibleEyebrow: '건강한 이용',
+    responsibleHeading: '건강한 이용 가이드',
     responsibleIntro:
-      '본 서비스는 학습과 엔터테인먼트를 위한 시뮬레이션이며 실제 복권 구매 또는 금전적 이익을 제공하지 않습니다.',
+      '학습·엔터테인먼트 목적의 시뮬레이터로, 현실 복권과 구분되는 건전한 사용 원칙을 안내합니다.',
     responsiblePrinciples: [
-      '19세 미만 사용자는 실제 복권 구매를 권장하지 않습니다.',
-      '과도한 몰입을 피하고 휴식 시간을 확보하세요.',
-      '결과 저장 파일은 개인 용도로 사용하고 타인의 데이터와 혼동하지 마세요.',
+      '19세 미만 사용자는 학습·참고 용도로만 이용하고, 실제 복권 구매는 거주지의 법적 제한을 따르세요.',
+      '세션 시간을 미리 정하고 주기적으로 휴식해 과몰입을 예방하세요.',
+      '시뮬레이션 결과는 수익을 보장하지 않으며, 복권 구매와 재정 판단은 사용자 책임입니다.',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: '로또 확률 해설',
@@ -1161,6 +1249,9 @@ const languageContent = {
     policyEyebrow: 'POLICY',
     policyHeading: '투명한 운영 약속',
     policyIntro: '운영 범위와 데이터 처리 방식을 공개해 Ads 품질 정책을 준수합니다.',
+    policyLegalTitle: '법적 고지',
+    policyPrivacyTitle: '개인정보 처리',
+    policySafetyTitle: '서비스 안전',
     policyLegal: [
       '본 서비스는 가상 시뮬레이터이며 복권 당첨을 보장하지 않습니다.',
       '모든 저작물은 Lux Lotto Studio 소유 또는 사용 허가 범위 내에서 제공됩니다.',
@@ -1175,7 +1266,10 @@ const languageContent = {
     ],
     contactEyebrow: 'CONTACT',
     contactHeading: '문의 및 운영 정보',
-    contactIntro: '운영자 정보와 지원 채널을 아래에서 확인하세요.',
+    contactIntro: '서비스 운영·정책 관련 문의는 아래 채널로 연락해 주세요. 개인 재정 상담은 제공하지 않습니다.',
+    contactOpsTitle: '운영 정보',
+    contactSupportTitle: '지원 채널',
+    contactDocsTitle: '정책 문서',
     contactOps: [
       { label: '운영자', value: 'Lux Lotto Studio · 대표 baek19xx' },
       { label: '위치', value: 'Gyeonggi-do, Republic of Korea' },
@@ -1188,8 +1282,7 @@ const languageContent = {
         value: 'Google Form 링크',
       },
       {
-        label: '이메일 문의',
-        href: 'mailto:baek_10090@naver.com',
+        label: '문의',
         value: 'baek_10090@naver.com',
       },
     ],
@@ -1204,7 +1297,7 @@ const languageContent = {
   en: {
     title: 'Random Lotto Studio',
     subtitle:
-      'Enjoy drawing either a single set or five sets of numbers, including a bonus ball. Save your outcomes instantly.',
+      'Draw one or five sets including the service ball and save every outcome instantly.',
     drawButton: 'Start Draw',
     redrawButton: 'Draw Again',
     holdPrompt: 'Drawing...',
@@ -1225,7 +1318,9 @@ const languageContent = {
     languageLabel: 'Choose language',
     controlsAriaLabel: 'Draw controls',
     modeAriaLabel: 'Select draw mode',
+    primaryNavLabel: 'Jump to primary sections',
     footerLinksLabel: 'Footer navigation',
+    footerDocsLabel: 'Policy shortcuts',
     navLinks: {
       info: 'Overview',
       responsible: 'Responsible Play',
@@ -1233,6 +1328,9 @@ const languageContent = {
       policy: 'Policy',
       faq: 'FAQ',
       contact: 'Contact',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Use',
+      responsibleDoc: 'Responsible Play Guide',
     },
     weekdayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     weekdaySuffix: '',
@@ -1245,13 +1343,13 @@ const languageContent = {
       { title: 'Result Export', body: 'Save sorted draw sets as plain-text logs for audit-friendly storage.' },
     ],
     responsibleEyebrow: 'RESPONSIBLE PLAY',
-    responsibleHeading: 'Responsible Use Guidelines',
+    responsibleHeading: 'Responsible Play Guide',
     responsibleIntro:
-      'This simulator does not sell tickets or guarantee financial gain. Use it to understand odds and draw flows.',
+      'Use this educational simulator responsibly—the guidelines below clarify how it differs from real-world gambling.',
     responsiblePrinciples: [
-      'Do not treat simulated draws as investment advice.',
-      'Set clear time limits for use and take frequent breaks.',
-      'Keep saved result files private if they include personal annotations.',
+      'Users under 19 should only explore the tool for learning, and all real-world purchases must follow local laws.',
+      'Define session limits and take frequent breaks to avoid over-immersion.',
+      'Simulation outputs never guarantee profit; lottery spending and financial choices remain your responsibility.',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: 'Understanding Lotto Odds',
@@ -1306,6 +1404,9 @@ const languageContent = {
     policyEyebrow: 'POLICY',
     policyHeading: 'Transparency Pledge',
     policyIntro: 'We document policies that align with Google AdSense and local regulations.',
+    policyLegalTitle: 'Legal Notice',
+    policyPrivacyTitle: 'Privacy',
+    policySafetyTitle: 'Product Safety',
     policyLegal: [
       'All content is provided “as-is” for educational and entertainment purposes.',
       'Users remain responsible for complying with local lottery regulations.',
@@ -1320,7 +1421,11 @@ const languageContent = {
     ],
     contactEyebrow: 'CONTACT',
     contactHeading: 'Reach the Team',
-    contactIntro: 'Use the following channels for partnership or support requests.',
+    contactIntro:
+      'Use the channels below for service and policy inquiries only. We cannot provide personal financial counseling.',
+    contactOpsTitle: 'Operator Info',
+    contactSupportTitle: 'Support Channels',
+    contactDocsTitle: 'Policy Documents',
     contactOps: [
       { label: 'Operator', value: 'Lux Lotto Studio · baek19xx' },
       { label: 'Location', value: 'Gyeonggi-do, Republic of Korea' },
@@ -1333,8 +1438,7 @@ const languageContent = {
         value: 'Google Form',
       },
       {
-        label: 'Email Support',
-        href: 'mailto:baek_10090@naver.com',
+        label: 'Contact',
         value: 'baek_10090@naver.com',
       },
     ],
@@ -1370,7 +1474,9 @@ const languageContent = {
     languageLabel: '言語を選択',
     controlsAriaLabel: '抽選コントロール',
     modeAriaLabel: 'モード選択',
+    primaryNavLabel: '主要セクションへのショートカット',
     footerLinksLabel: 'フッターナビゲーション',
+    footerDocsLabel: 'ポリシーページ',
     navLinks: {
       info: '紹介',
       responsible: '責任ある利用',
@@ -1378,6 +1484,9 @@ const languageContent = {
       policy: 'ポリシー',
       faq: 'FAQ',
       contact: 'お問い合わせ',
+      privacy: 'プライバシーポリシー',
+      terms: '利用規約',
+      responsibleDoc: '健全な利用ガイド',
     },
     weekdayNames: ['日', '月', '火', '水', '木', '金', '土'],
     weekdaySuffix: '曜',
@@ -1391,11 +1500,12 @@ const languageContent = {
     ],
     responsibleEyebrow: 'RESPONSIBLE PLAY',
     responsibleHeading: '責任ある利用ガイド',
-    responsibleIntro: '本サービスは学習・娯楽用シミュレーターであり、金銭的利益や当選を保証しません。',
+    responsibleIntro:
+      '本シミュレーターを健全に利用するための指針です。現実のギャンブルとは切り離して扱ってください。',
     responsiblePrinciples: [
-      '未成年の実際の宝くじ購入は推奨されません。',
-      '長時間の連続利用を避け、適度に休憩を取りましょう。',
-      '結果ファイルを共有する際は個人情報に注意してください。',
+      '19歳未満の利用者は学習・参考目的に限り、現実の宝くじ購入は各地域の法令を優先してください。',
+      'セッション時間を決め、こまめに休憩を取り過度な没入を防ぎましょう。',
+      '結果は収益を保証しません。実際の購入や金銭判断は利用者ご自身の責任です。',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: 'ロト確率ガイド',
@@ -1450,6 +1560,9 @@ const languageContent = {
     policyEyebrow: 'POLICY',
     policyHeading: '透明性へのコミットメント',
     policyIntro: '利用規約やデータ方針を公開し、Google AdSenseの品質基準に準拠します。',
+    policyLegalTitle: '法的告知',
+    policyPrivacyTitle: '個人情報の取扱い',
+    policySafetyTitle: 'サービス安全性',
     policyLegal: [
       '本サービスは教育・エンタメ目的で提供されます。',
       '地域の宝くじ規制や年齢制限の遵守は利用者の責任です。',
@@ -1464,7 +1577,10 @@ const languageContent = {
     ],
     contactEyebrow: 'CONTACT',
     contactHeading: 'お問い合わせ',
-    contactIntro: '運営情報と連絡先は以下をご確認ください。',
+    contactIntro: '以下の窓口ではサービス運営やポリシーに関する問い合わせのみ受け付けています。個別の財務相談は行いません。',
+    contactOpsTitle: '運営情報',
+    contactSupportTitle: 'サポートチャネル',
+    contactDocsTitle: 'ポリシー文書',
     contactOps: [
       { label: '運営', value: 'Lux Lotto Studio · baek19xx' },
       { label: '所在地', value: '韓国 京畿道' },
@@ -1477,8 +1593,7 @@ const languageContent = {
         value: 'Googleフォーム',
       },
       {
-        label: 'メール対応',
-        href: 'mailto:baek_10090@naver.com',
+        label: 'お問い合わせ',
         value: 'baek_10090@naver.com',
       },
     ],
@@ -1495,6 +1610,8 @@ const languageContent = {
 function handleLanguageChange() {
   const lang = languageSelect ? languageSelect.value : 'ko';
   currentLanguage = lang;
+  persistLanguagePreference(lang);
+  document.documentElement.setAttribute('lang', lang);
   const content = languageContent[lang] || languageContent.ko;
   if (heroTitle) heroTitle.textContent = content.title;
   if (heroSubtitle) heroSubtitle.textContent = content.subtitle;
@@ -1505,6 +1622,7 @@ function handleLanguageChange() {
   if (resultsDisclaimerEl) resultsDisclaimerEl.textContent = content.resultsDisclaimer || '';
   if (arenaCaption) arenaCaption.textContent = content.arenaCaption;
   updateInformationalSections(content);
+  updateNavigation(content);
   updateModeButtonLabels();
   updateDrawButtonLabel();
   updateHeroDate();

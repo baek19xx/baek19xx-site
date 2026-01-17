@@ -67,15 +67,13 @@ select {
 
 .hero {
   display: flex;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px 28px;
   background: linear-gradient(135deg, rgba(97, 255, 202, 0.1), rgba(9, 17, 41, 0.9));
   border: 1px solid var(--border);
   border-radius: 24px;
   backdrop-filter: blur(18px);
-  position: relative;
-  flex-wrap: wrap;
 }
 
 .hero h1 {
@@ -86,8 +84,70 @@ select {
 .hero .subtitle {
   margin: 0;
   color: var(--muted);
-  max-width: 520px;
+  max-width: 100%;
   line-height: 1.4;
+  word-break: keep-all;
+}
+
+.hero-upper {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-eyebrow-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+}
+
+.accent-date {
+  margin: 0;
+  white-space: nowrap;
+  color: rgba(244, 248, 255, 0.8);
+  font-size: 0.95rem;
+}
+
+.hero-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.accent-number {
+  font-size: clamp(2.6rem, 4.8vw, 3.6rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.hero-lower {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.primary-nav {
+  flex: 1;
+  width: auto;
+  margin-top: 0;
+}
+
+.accent-lang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .primary-nav {
@@ -132,10 +192,8 @@ select {
     font-size: 0.95rem;
   }
 
-  .hero-accent {
+  .hero-upper {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
   }
 
   .option-toggle {
@@ -160,11 +218,6 @@ select {
   .toggle-switch.active .toggle-thumb {
     transform: translateX(18px);
   }
-}
-
-.accent-number {
-  font-size: clamp(1.8rem, 4.8vw, 3.4rem);
-  font-weight: 700;
 }
 
 .hero-date {
@@ -192,21 +245,23 @@ select {
   color: var(--text);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
-  padding: 6px 28px 6px 14px;
+  padding: 6px 34px 6px 14px;
   font-size: 0.85rem;
   appearance: none;
   cursor: pointer;
 }
 
 .lang-picker::after {
-  content: '⌄';
+  content: '';
   position: absolute;
   right: 12px;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(244, 248, 255, 0.8);
+  border-bottom: 2px solid rgba(244, 248, 255, 0.8);
+  transform: translateY(-75%) rotate(45deg);
   pointer-events: none;
-  color: rgba(244, 248, 255, 0.7);
 }
 
 .visually-hidden {
@@ -230,6 +285,15 @@ select {
 
 .subtitle {
   color: var(--muted);
+}
+
+.subtitle-line {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.subtitle-line:last-child {
+  margin-bottom: 0;
 }
 
 .lotto-app {
@@ -580,6 +644,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
 .section-header {
