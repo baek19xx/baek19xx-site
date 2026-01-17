@@ -1,7 +1,13 @@
 function scrollToDrawSection() {
-  const target = document.querySelector('.experience-layout');
-  if (!target) return;
-  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!experienceLayoutEl) return;
+  if (window.innerWidth <= 768 && controlsStripEl) {
+    const controlsRect = controlsStripEl.getBoundingClientRect();
+    const targetTop = window.scrollY + controlsRect.bottom - window.innerHeight + 24;
+    const destination = Math.max(targetTop, 0);
+    window.scrollTo({ top: destination, behavior: 'smooth' });
+    return;
+  }
+  experienceLayoutEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function handleScrollButtonVisibility() {
@@ -79,6 +85,7 @@ const navLinks = {
   responsibleDoc: document.querySelectorAll('[data-nav="responsibleDoc"]'),
 };
 const controlsStripEl = document.querySelector('.controls-strip');
+const experienceLayoutEl = document.querySelector('.experience-layout');
 const modeButtonsGroup = document.querySelector('.mode-buttons');
 const footerLinksEl = document.querySelector('.footer-links');
 const languageLabelEl = document.querySelector('label[for="languageSelect"]');
