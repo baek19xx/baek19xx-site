@@ -1037,8 +1037,48 @@ select {
   color: var(--accent-strong);
   font-weight: 700;
   font-size: 0.95rem;
-  text-align: center;
-  padding: 0 4px;
+}
+
+.contact-card li a:hover {
+  text-decoration: underline;
+}
+
+.scroll-draw-btn {
+  position: fixed;
+  top: calc(50% + 430px);
+  right: clamp(12px, 4vw, 32px);
+  transform: translate(-250px, -50%) scale(0.9);
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(97, 255, 202, 0.35), rgba(11, 21, 40, 0.92));
+  border: 1px solid rgba(97, 255, 202, 0.5);
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.45);
+}
+
+.scroll-draw-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-280px, -50%) scale(1);
+}
+
+.scroll-draw-btn:hover {
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.55);
+}
+
+.scroll-draw-btn:focus-visible {
+  outline: 2px solid rgba(97, 255, 202, 0.9);
+  outline-offset: 3px;
 }
 
 @media (max-width: 1100px) {
@@ -1145,6 +1185,16 @@ select {
   .footer-links {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .scroll-draw-btn {
+    top: auto;
+    bottom: 24px;
+    transform: translateY(0) scale(0.92);
+  }
+
+  .scroll-draw-btn.visible {
+    transform: translateY(0) scale(1);
   }
 }
 
