@@ -4,6 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-adsense-account" content="ca-pub-5668095080661070" />
+    <meta
+      name="description"
+      content="Lux Lotto Studio는 물리 기반 로또 추첨 시뮬레이터로, 단일·5세트 추첨과 확률/책임·보호 안내를 한국어·영어·일본어로 제공합니다."
+    />
+    <link rel="canonical" href="https://baek19xx.github.io/lotto/" />
+    <link rel="sitemap" type="application/xml" href="https://baek19xx.github.io/lotto/sitemap.xml" />
+    <meta property="og:title" content="Lux Lotto Studio · 로또 추첨 시뮬레이터" />
+    <meta
+      property="og:description"
+      content="실시간 물리 엔진으로 로또 공을 추첨하고, 결과 저장·책임 이용·확률 해설까지 한 곳에서 확인하세요."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://baek19xx.github.io/lotto/" />
+    <meta property="og:site_name" content="Lux Lotto Studio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lux Lotto Studio · 로또 추첨 시뮬레이터" />
+    <meta
+      name="twitter:description"
+      content="실시간 물리 엔진으로 로또 공을 추첨하고, 결과 저장·책임 이용·확률 해설까지 한 곳에서 확인하세요."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Lux Lotto Studio",
+        "url": "https://baek19xx.github.io/lotto/",
+        "description": "물리 기반 로또 추첨 시뮬레이터와 책임 이용 안내를 제공하는 Lux Lotto Studio",
+        "email": "baek_10090@naver.com"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "시뮬레이터는 실제 당첨 번호를 기반으로 하나요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Lux Lotto Studio는 매번 1~45 사이 숫자를 무작위로 추첨하며, 과거 당첨 번호나 히스토리를 불러오지 않습니다."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "5세트 모드에서 중복 허용을 켜면 어떻게 되나요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "각 세트마다 번호 풀을 초기화하여 동일한 숫자가 여러 세트에 나타날 수 있습니다. 여러 장의 실물 복권을 구매하는 것과 비슷한 동작입니다."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "저장한 결과 파일은 서버로 업로드되나요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "결과 저장 기능은 브라우저가 텍스트 파일을 직접 내려받는 방식이며, 어떤 데이터도 서버로 전송되지 않습니다."
+            }
+          }
+        ]
+      }
+    </script>
     <title>럭스 로또 추첨실</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
@@ -44,6 +106,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#mainContent">본문 바로가기</a>
     <div class="page-shell">
       <header class="hero">
         <div class="hero-content">
@@ -67,21 +130,31 @@
             </select>
           </div>
         </div>
+        <nav class="primary-nav" aria-label="주요 섹션 바로가기">
+          <a href="#infoSection">서비스 소개</a>
+          <a href="#responsibleSection">책임 이용</a>
+          <a href="#oddsSection">로또 확률</a>
+          <a href="#policySection">정책</a>
+          <a href="#faqSection">FAQ</a>
+          <a href="#contactSection">문의</a>
+          <a href="./privacy.html">개인정보 처리방침</a>
+          <a href="./terms.html">이용약관</a>
+        </nav>
       </header>
 
-      <main class="lotto-app">
+      <main class="lotto-app" id="mainContent">
         <section class="experience-layout">
           <div class="arena-stack">
             <div class="arena-wrapper">
-              <div class="arena" aria-live="polite">
-                <canvas id="ballCanvas"></canvas>
+              <div class="arena" aria-live="polite" aria-label="실시간 로또 추첨 아레나">
+                <canvas id="ballCanvas" role="img" aria-label="물리 기반 로또 공 시뮬레이션 장면"></canvas>
                 <div id="collectionZone" class="collection-zone" aria-hidden="true"></div>
                 <div class="orb-glow"></div>
               </div>
               <p class="arena-caption" id="arenaCaption">
                 빠르게 튀어다니는 공에서 번호가 사라지면 추첨 결과에 포함된 것입니다.
               </p>
-              <div class="option-toggle disabled" id="duplicateToggle" role="group" aria-label="추가 옵션">
+              <div class="option-toggle disabled" id="duplicateToggle" role="group" aria-label="중복 번호 옵션">
                 <div class="toggle-copy">
                   <span class="toggle-label" id="duplicateToggleLabel">5세트 세트마다 번호 중복 허용</span>
                 </div>
@@ -125,7 +198,13 @@
                   <h2 id="resultsHeading">이번 라운드 결과</h2>
                 </div>
               </header>
-              <div id="resultsContainer" class="results-list empty">
+              <div
+                id="resultsContainer"
+                class="results-list empty"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 <p>아직 추첨이 진행되지 않았습니다.</p>
               </div>
               <p class="results-disclaimer" id="resultsDisclaimer">
@@ -245,6 +324,11 @@
           <a href="#policySection" data-nav="policy">정책</a>
           <a href="#faqSection" data-nav="faq">FAQ</a>
           <a href="#contactSection" data-nav="contact">문의</a>
+        </div>
+        <div class="footer-docs" aria-label="정책 문서 바로가기">
+          <a href="./privacy.html">개인정보 처리방침</a>
+          <a href="./terms.html">이용약관</a>
+          <a href="./responsible-play.html">Responsible Play</a>
         </div>
         <p class="footer-note">
           <span id="footerCopyright">

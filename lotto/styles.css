@@ -28,6 +28,25 @@ body {
   touch-action: manipulation;
 }
 
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--accent);
+  color: #011016;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  z-index: 1000;
+  transition: transform 0.2s ease, left 0.2s ease;
+}
+
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+  outline: none;
+}
+
 input,
 textarea,
 select {
@@ -55,6 +74,8 @@ select {
   border: 1px solid var(--border);
   border-radius: 24px;
   backdrop-filter: blur(18px);
+  position: relative;
+  flex-wrap: wrap;
 }
 
 .hero h1 {
@@ -67,6 +88,30 @@ select {
   color: var(--muted);
   max-width: 520px;
   line-height: 1.4;
+}
+
+.primary-nav {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.primary-nav a {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.primary-nav a:hover,
+.primary-nav a:focus-visible {
+  border-color: var(--accent);
+  background: rgba(97, 255, 202, 0.1);
 }
 
 @media (max-width: 600px) {
@@ -823,6 +868,24 @@ select {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.footer-docs {
+  margin-top: 12px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+.footer-docs a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer-docs a:hover,
+.footer-docs a:focus-visible {
+  text-decoration: underline;
 }
 
 .site-footer a {
