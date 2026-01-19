@@ -37,25 +37,28 @@ const legalContent = {
         {
           heading: '1. 수집하는 정보',
           paragraphs: [
-            '본 서비스는 회원가입이나 로그인 절차가 없으며, 별도의 개인정보를 서버에 수집하지 않습니다. 로컬 저장소에 보관되는 정보는 추첨 결과 텍스트 파일 등 사용자 디바이스 안에만 존재합니다.',
+            '본 서비스는 회원가입이나 로그인 절차가 없으며, 추첨 결과 텍스트 파일 등은 사용자 디바이스(브라우저/로컬)에만 저장됩니다.',
+            '서비스 품질 개선을 위해 Google Analytics 및 Microsoft Clarity를 사용하며, 이 과정에서 IP 주소, 기기·브라우저 정보, 접속 로그, 페이지뷰·스크롤·클릭 등의 이용 기록이 비식별 형태로 수집될 수 있습니다.',
+            '문의 폼을 사용하면 입력한 연락처와 문의 내용이 Google Forms에 저장되며, 문의 대응 목적으로만 사용됩니다.',
           ],
         },
         {
           heading: '2. 정보 이용 목적',
           paragraphs: [
-            '로컬에 저장된 결과 파일은 사용자 본인의 기록·연구 목적에 한해 사용됩니다. 운영자는 해당 데이터에 접근하거나 제3자와 공유하지 않습니다.',
+            '서비스 안정성 개선, UI/UX 개선, 오류 분석 및 문의 대응 목적에 한해 이용됩니다. 로컬에 저장된 결과 파일은 사용자 본인의 기록·연구 목적에만 사용되며, 운영자는 해당 데이터에 접근하지 않습니다.',
           ],
         },
         {
           heading: '3. 쿠키 및 추적 기술',
           paragraphs: [
-            'Lux Lotto Studio는 광고·분석 목적으로 쿠키나 외부 추적 스크립트를 사용하지 않습니다. 브라우저 기본 로그를 제외한 어떤 접속 기록도 저장하지 않습니다.',
+            'Google Analytics, Microsoft Clarity, Google AdSense는 쿠키 또는 유사 기술을 사용할 수 있습니다. 이를 통해 트래픽 통계와 서비스 개선, 광고 제공을 지원합니다.',
+            '쿠키 사용을 원치 않으면 브라우저 설정에서 차단할 수 있으며, Google 광고 설정(https://adssettings.google.com)과 Google 개인정보처리방침(https://policies.google.com/privacy), Microsoft 개인정보처리방침(https://privacy.microsoft.com)을 참고하세요.',
           ],
         },
         {
           heading: '4. 제3자 제공',
           paragraphs: [
-            '사용자의 개인정보를 제3자에게 판매하거나 제공하지 않습니다. 법적 의무에 의해 요구되는 경우에 한해 관계 법령을 준수하여 필요한 범위 내에서만 정보를 공개합니다.',
+            '개인정보를 제3자에게 판매하지 않으며, 분석·광고 파트너(Google, Microsoft)는 서비스 제공을 위한 처리자로서 제한된 범위에서 데이터를 처리할 수 있습니다. 법적 의무가 있는 경우에 한해 필요한 범위 내에서 정보를 공개합니다.',
           ],
         },
         {
@@ -67,7 +70,7 @@ const legalContent = {
         {
           heading: '6. 이용자의 권리',
           paragraphs: [
-            '사용자는 언제든지 브라우저 캐시 및 로컬 저장 데이터를 삭제할 수 있습니다. 서비스 이용 중 문의 사항이 있으면 baek_10090@naver.com 으로 연락해 주세요.',
+            '사용자는 브라우저 캐시·쿠키를 삭제하거나 설정을 변경해 추적을 제한할 수 있습니다. Google Analytics 차단은 https://tools.google.com/dlpage/gaoptout 를 참고하세요. 문의 사항이 있으면 baek_10090@naver.com 으로 연락해 주세요.',
           ],
         },
         {
@@ -80,6 +83,7 @@ const legalContent = {
       backLink: '메인 페이지로 돌아가기',
       relatedIntro: '추가 정책과 책임 이용 가이드는 아래 페이지에서 확인할 수 있습니다.',
       relatedLinks: [
+        { href: './about.html', label: '사이트 소개' },
         { href: './terms.html', label: '이용약관' },
         { href: './responsible-play.html', label: 'Responsible Play 가이드' },
       ],
@@ -94,25 +98,28 @@ const legalContent = {
         {
           heading: '1. Data We Collect',
           paragraphs: [
-            'No account, login, or form submission is required to use this simulator. We do not store personal data on our servers; draw logs exist only on your device.',
+            'No account or login is required, and draw logs remain on your device (browser/local storage).',
+            'We use Google Analytics and Microsoft Clarity to improve service quality. This may collect pseudonymous usage data such as IP address, device/browser details, access logs, and interaction events (page views, scrolls, clicks).',
+            'If you submit the support form, your contact details and message are stored in Google Forms and used solely to respond to your inquiry.',
           ],
         },
         {
           heading: '2. Purpose of Use',
           paragraphs: [
-            'Locally saved result files are for your personal research or documentation. The operator cannot access or share those files.',
+            'Data is used only to improve stability, UX, bug diagnostics, and inquiry responses. Locally saved result files remain for your personal documentation and are not accessed by the operator.',
           ],
         },
         {
           heading: '3. Cookies & Tracking',
           paragraphs: [
-            'Lux Lotto Studio does not run advertising pixels or third-party tracking scripts. Aside from basic browser diagnostics, no access logs are retained.',
+            'Google Analytics, Microsoft Clarity, and Google AdSense may use cookies or similar technologies to provide traffic insights, service improvements, and ad delivery.',
+            'You can block cookies in your browser. For more details, see Google Ad Settings (https://adssettings.google.com), Google Privacy Policy (https://policies.google.com/privacy), and Microsoft Privacy Statement (https://privacy.microsoft.com).',
           ],
         },
         {
           heading: '4. Third-Party Sharing',
           paragraphs: [
-            'We never sell or transfer your personal data to third parties. Only when legally compelled will we disclose information within the required scope.',
+            'We do not sell personal data. Analytics and advertising partners (Google, Microsoft) may process limited data as service providers. We disclose information only when legally required and within the mandated scope.',
           ],
         },
         {
@@ -124,7 +131,7 @@ const legalContent = {
         {
           heading: '6. User Rights',
           paragraphs: [
-            'You may clear browser cache and local storage whenever you like. For privacy questions, contact baek_10090@naver.com.',
+            'You may clear browser cache/cookies or adjust settings to limit tracking. For Google Analytics opt-out, visit https://tools.google.com/dlpage/gaoptout. For privacy questions, contact baek_10090@naver.com.',
           ],
         },
         {
@@ -137,6 +144,7 @@ const legalContent = {
       backLink: 'Return to main page',
       relatedIntro: 'Find additional policies and responsible use guidelines below.',
       relatedLinks: [
+        { href: './about.html', label: 'About the Studio' },
         { href: './terms.html', label: 'Terms of Use' },
         { href: './responsible-play.html', label: 'Responsible Play Guide' },
       ],
@@ -151,25 +159,28 @@ const legalContent = {
         {
           heading: '1. 収集する情報',
           paragraphs: [
-            '本サービスの利用にアカウント登録やログインは不要で、個人情報をサーバーに保存しません。抽選結果のログはユーザー端末にのみ存在します。',
+            'アカウント登録やログインは不要で、抽選結果のログはユーザー端末（ブラウザ/ローカル）にのみ保存されます。',
+            'サービス品質向上のため Google Analytics と Microsoft Clarity を利用しており、IPアドレス、端末・ブラウザ情報、アクセスログ、ページビュー・スクロール・クリックなどの利用データが匿名化された形で収集される場合があります。',
+            'お問い合わせフォームを利用した場合、連絡先と内容は Google Forms に保存され、お問い合わせ対応のためにのみ使用されます。',
           ],
         },
         {
           heading: '2. 情報の利用目的',
           paragraphs: [
-            'ローカルに保存された結果ファイルは、ユーザー自身の記録・研究用途に限定されます。運営者がアクセスしたり第三者と共有することはありません。',
+            '安定性向上、UX改善、障害分析、お問い合わせ対応のためにのみ利用されます。ローカル保存された結果ファイルは個人用途に限定され、運営者がアクセスすることはありません。',
           ],
         },
         {
           heading: '3. クッキーと追跡技術',
           paragraphs: [
-            'Lux Lotto Studio は広告・分析目的のクッキーや外部トラッキングスクリプトを使用しません。ブラウザの基本ログ以外のアクセス記録は保持しません。',
+            'Google Analytics、Microsoft Clarity、Google AdSense はクッキーまたは類似技術を使用する場合があります。トラフィック分析、サービス改善、広告配信のために利用されます。',
+            'クッキーを拒否する場合はブラウザ設定で無効化できます。詳細は Google 広告設定（https://adssettings.google.com）、Google プライバシーポリシー（https://policies.google.com/privacy）、Microsoft プライバシーステートメント（https://privacy.microsoft.com）をご覧ください。',
           ],
         },
         {
           heading: '4. 第三者提供',
           paragraphs: [
-            '利用者の個人情報を第三者へ販売・提供することはありません。法的義務がある場合に限り、必要な範囲で情報を開示します。',
+            '個人情報を第三者へ販売することはありません。分析・広告パートナー（Google、Microsoft）はサービス提供のために限定的な範囲でデータを処理する場合があります。法的義務がある場合に限り、必要な範囲で情報を開示します。',
           ],
         },
         {
@@ -181,7 +192,7 @@ const legalContent = {
         {
           heading: '6. 利用者の権利',
           paragraphs: [
-            'ユーザーはいつでもブラウザのキャッシュやローカルデータを削除できます。ご質問は baek_10090@naver.com までお問い合わせください。',
+            'ユーザーはブラウザのキャッシュ/クッキーを削除したり設定で追跡を制限できます。Google Analytics の無効化は https://tools.google.com/dlpage/gaoptout をご参照ください。ご質問は baek_10090@naver.com までお問い合わせください。',
           ],
         },
         {
@@ -194,6 +205,7 @@ const legalContent = {
       backLink: 'メインページに戻る',
       relatedIntro: 'その他のポリシーや責任ある利用ガイドは以下のリンクをご覧ください。',
       relatedLinks: [
+        { href: './about.html', label: 'サイト紹介' },
         { href: './terms.html', label: '利用規約' },
         { href: './responsible-play.html', label: '責任あるプレイガイド' },
       ],
@@ -255,6 +267,7 @@ const legalContent = {
       backLink: '메인 페이지로 돌아가기',
       relatedIntro: '추가 정책과 책임 이용 안내는 아래 링크에서 확인할 수 있습니다.',
       relatedLinks: [
+        { href: './about.html', label: '사이트 소개' },
         { href: './privacy.html', label: '개인정보 처리방침' },
         { href: './responsible-play.html', label: 'Responsible Play 가이드' },
       ],
@@ -314,6 +327,7 @@ const legalContent = {
       backLink: 'Return to main page',
       relatedIntro: 'See additional policies and responsible use resources below.',
       relatedLinks: [
+        { href: './about.html', label: 'About the Studio' },
         { href: './privacy.html', label: 'Privacy Policy' },
         { href: './responsible-play.html', label: 'Responsible Play Guide' },
       ],
@@ -373,7 +387,169 @@ const legalContent = {
       backLink: 'メインページに戻る',
       relatedIntro: 'その他のポリシーや責任ある利用ガイドは以下のリンクをご覧ください。',
       relatedLinks: [
+        { href: './about.html', label: 'サイト紹介' },
         { href: './privacy.html', label: 'プライバシーポリシー' },
+        { href: './responsible-play.html', label: '責任あるプレイガイド' },
+      ],
+      selectLabel: '言語を選択',
+      backAriaLabel: 'メインページに戻る',
+    },
+  },
+  about: {
+    ko: {
+      eyebrow: 'ABOUT',
+      title: 'Lux Lotto Studio 소개',
+      intro: 'Lux Lotto Studio는 로또 추첨 과정을 물리 기반으로 재현한 교육·엔터테인먼트 시뮬레이터입니다.',
+      sections: [
+        {
+          heading: '1. 서비스 목적',
+          paragraphs: [
+            '본 서비스는 확률 이해와 시뮬레이션 체험을 위한 학습용 도구입니다. 실제 복권 판매, 당첨 보장, 금전적 보상을 제공하지 않습니다.',
+            '추첨 과정의 흐름을 시각적으로 경험하고, 결과를 개인 기록으로 보관하는 것을 목표로 합니다.',
+          ],
+        },
+        {
+          heading: '2. 시뮬레이션 방식',
+          paragraphs: [
+            '1~45 번호 풀을 무작위로 생성하며 단일 세트 또는 5세트 모드로 추첨을 진행합니다. 서비스 번호(보너스)까지 함께 제공됩니다.',
+            '공이 수집 존에 들어오는 순간을 기준으로 결과를 확정하는 물리 기반 애니메이션을 적용했습니다.',
+          ],
+        },
+        {
+          heading: '3. 데이터 처리와 보안',
+          paragraphs: [
+            '추첨 결과는 브라우저 로컬에 저장되며 서버로 전송되지 않습니다. 결과 저장 파일은 사용자 기기에만 보관됩니다.',
+            '서비스 개선을 위해 Google Analytics 및 Microsoft Clarity를 사용하며, 문의 폼 제출 데이터는 문의 대응 목적으로만 활용됩니다.',
+          ],
+        },
+        {
+          heading: '4. 책임 있는 이용',
+          paragraphs: [
+            '19세 미만 사용자는 학습 목적에 한해 이용하고, 실제 복권 구매는 거주지 법령을 준수해야 합니다.',
+            '본 서비스는 재정 상담이나 투자 조언을 제공하지 않으며, 모든 판단은 사용자 책임입니다.',
+          ],
+        },
+        {
+          heading: '5. 운영 정보',
+          list: [
+            '운영 주체: Lux Lotto Studio',
+            '대표: baek19xx',
+            '연락처: baek_10090@naver.com',
+            '서비스 형태: 웹 기반 로또 시뮬레이터',
+          ],
+        },
+      ],
+      backLink: '메인 페이지로 돌아가기',
+      relatedIntro: '개인정보 처리와 서비스 이용 조건은 아래 문서에서 확인할 수 있습니다.',
+      relatedLinks: [
+        { href: './privacy.html', label: '개인정보 처리방침' },
+        { href: './terms.html', label: '이용약관' },
+        { href: './responsible-play.html', label: 'Responsible Play 가이드' },
+      ],
+      selectLabel: '언어 선택',
+      backAriaLabel: '메인 페이지로 돌아가기',
+    },
+    en: {
+      eyebrow: 'ABOUT',
+      title: 'About Lux Lotto Studio',
+      intro: 'Lux Lotto Studio is a physics-inspired lottery draw simulator built for education and entertainment.',
+      sections: [
+        {
+          heading: '1. Purpose of the Service',
+          paragraphs: [
+            'This service is designed to help users understand probability and experience draw mechanics. It does not sell lottery tickets, guarantee winnings, or provide monetary rewards.',
+            'Our goal is to visualize the draw flow and let users archive results for personal reference.',
+          ],
+        },
+        {
+          heading: '2. Simulation Methodology',
+          paragraphs: [
+            'Each draw generates a random pool of numbers from 1–45 and supports single or five-set modes with a service (bonus) ball.',
+            'Results are captured when balls enter the collection zone, reinforcing the physics-based draw experience.',
+          ],
+        },
+        {
+          heading: '3. Data Handling & Security',
+          paragraphs: [
+            'Draw results stay in your browser and local files only—nothing is uploaded to servers.',
+            'We use Google Analytics and Microsoft Clarity to improve service quality, and inquiry form submissions are used solely to respond to users.',
+          ],
+        },
+        {
+          heading: '4. Responsible Use',
+          paragraphs: [
+            'Users under 19 should use the simulator only for learning purposes and comply with local lottery laws.',
+            'We do not provide financial counseling. Real-world decisions remain your responsibility.',
+          ],
+        },
+        {
+          heading: '5. Operator Information',
+          list: [
+            'Operator: Lux Lotto Studio',
+            'Owner: baek19xx',
+            'Contact: baek_10090@naver.com',
+            'Service Type: Web-based lottery simulator',
+          ],
+        },
+      ],
+      backLink: 'Return to main page',
+      relatedIntro: 'See privacy and usage policies below.',
+      relatedLinks: [
+        { href: './privacy.html', label: 'Privacy Policy' },
+        { href: './terms.html', label: 'Terms of Use' },
+        { href: './responsible-play.html', label: 'Responsible Play Guide' },
+      ],
+      selectLabel: 'Choose language',
+      backAriaLabel: 'Return to main page',
+    },
+    ja: {
+      eyebrow: 'ABOUT',
+      title: 'Lux Lotto Studio について',
+      intro: 'Lux Lotto Studio は抽選の流れを物理的に再現する学習・エンタメ向けシミュレーターです。',
+      sections: [
+        {
+          heading: '1. サービスの目的',
+          paragraphs: [
+            '確率理解と抽選体験を目的とした学習ツールであり、宝くじ販売・当選保証・金銭的報酬は提供しません。',
+            '抽選フローを可視化し、結果を個人記録として保管できるよう設計しています。',
+          ],
+        },
+        {
+          heading: '2. シミュレーション方式',
+          paragraphs: [
+            '1〜45の番号プールをランダム生成し、1セットまたは5セットの抽選に対応します。サービス番号（ボーナス）も含まれます。',
+            'ボールが収集ゾーンに入ったタイミングで結果を確定する物理演算アニメーションを採用しています。',
+          ],
+        },
+        {
+          heading: '3. データ処理と安全性',
+          paragraphs: [
+            '抽選結果はブラウザ/ローカルにのみ保存され、サーバーに送信されません。',
+            'Google Analytics と Microsoft Clarity を利用して品質改善を行い、問い合わせフォームの内容は対応目的にのみ使用します。',
+          ],
+        },
+        {
+          heading: '4. 責任ある利用',
+          paragraphs: [
+            '19歳未満の利用者は学習目的に限り、実際の宝くじ購入は居住地域の法令に従ってください。',
+            '財務相談や投資助言は行いません。実際の判断は利用者自身の責任です。',
+          ],
+        },
+        {
+          heading: '5. 運営情報',
+          list: [
+            '運営: Lux Lotto Studio',
+            '代表: baek19xx',
+            '連絡先: baek_10090@naver.com',
+            'サービス形態: Webベースのロトシミュレーター',
+          ],
+        },
+      ],
+      backLink: 'メインページに戻る',
+      relatedIntro: 'プライバシーや利用条件は以下の文書をご確認ください。',
+      relatedLinks: [
+        { href: './privacy.html', label: 'プライバシーポリシー' },
+        { href: './terms.html', label: '利用規約' },
         { href: './responsible-play.html', label: '責任あるプレイガイド' },
       ],
       selectLabel: '言語を選択',
@@ -420,6 +596,7 @@ const legalContent = {
       backLink: '메인 페이지로 돌아가기',
       relatedIntro: '정책 문서와 개인정보 안내는 다음 페이지에서도 확인할 수 있습니다.',
       relatedLinks: [
+        { href: './about.html', label: '사이트 소개' },
         { href: './privacy.html', label: '개인정보 처리방침' },
         { href: './terms.html', label: '이용약관' },
       ],
@@ -465,6 +642,7 @@ const legalContent = {
       backLink: 'Return to main page',
       relatedIntro: 'You can review additional policies below.',
       relatedLinks: [
+        { href: './about.html', label: 'About the Studio' },
         { href: './privacy.html', label: 'Privacy Policy' },
         { href: './terms.html', label: 'Terms of Use' },
       ],
@@ -510,6 +688,7 @@ const legalContent = {
       backLink: 'メインページに戻る',
       relatedIntro: 'その他のポリシーや関連ドキュメントは以下をご確認ください。',
       relatedLinks: [
+        { href: './about.html', label: 'サイト紹介' },
         { href: './privacy.html', label: 'プライバシーポリシー' },
         { href: './terms.html', label: '利用規約' },
       ],

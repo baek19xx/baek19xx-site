@@ -40,6 +40,7 @@ const resultsContainer = document.getElementById('resultsContainer');
 const heroTitle = document.getElementById('heroTitle');
 const heroSubtitle = document.getElementById('heroSubtitle');
 const metaText = document.getElementById('metaText');
+const mobileControlsHint = document.getElementById('mobileControlsHint');
 const resultsEyebrow = document.getElementById('resultsEyebrow');
 const resultsHeading = document.getElementById('resultsHeading');
 const resultsDisclaimerEl = document.getElementById('resultsDisclaimer');
@@ -86,6 +87,7 @@ const primaryNav = document.querySelector('.primary-nav');
 const footerDocsEl = document.querySelector('.footer-docs');
 const navLinks = {
   info: document.querySelectorAll('[data-nav="info"]'),
+  about: document.querySelectorAll('[data-nav="about"]'),
   responsible: document.querySelectorAll('[data-nav="responsible"]'),
   odds: document.querySelectorAll('[data-nav="odds"]'),
   policy: document.querySelectorAll('[data-nav="policy"]'),
@@ -1171,6 +1173,7 @@ const languageContent = {
     preparingText: '추첨 준비 중...',
     saveButton: '결과 저장',
     meta: '버튼을 누른 채 12시 방향 수집 존에 닿은 공은 즉시 집계되고, 손을 떼면 남은 번호가 한 번에 완성됩니다.',
+    mobileControlsHint: '모바일에서는 화면 하단의 추첨 시작 버튼과 안내 문구를 확인해 주세요.',
     resultsLabel: '이번 라운드 결과',
     resultsEyebrow: 'RESULTS',
     resultsDisclaimer: '본 서비스는 시뮬레이션이며 금전적 보상을 제공하지 않습니다.',
@@ -1185,9 +1188,10 @@ const languageContent = {
     modeAriaLabel: '추첨 모드 선택',
     primaryNavLabel: '주요 섹션 바로가기',
     footerLinksLabel: '푸터 탐색',
-    footerDocsLabel: '정책 문서 바로가기',
+    footerDocsLabel: '관련 문서 바로가기',
     navLinks: {
       info: '소개',
+      about: '사이트 소개',
       responsible: '건강한 이용',
       odds: '확률',
       policy: '정책',
@@ -1275,8 +1279,8 @@ const languageContent = {
       '모든 저작물은 Lux Lotto Studio 소유 또는 사용 허가 범위 내에서 제공됩니다.',
     ],
     policyPrivacy: [
-      '로컬 저장소에 한정된 최소 정보만 사용합니다.',
-      '클라우드로 전송되는 개인정보는 없습니다.',
+      '추첨 결과와 개인 기록은 로컬에만 저장됩니다.',
+      '서비스 품질 향상을 위해 비식별 이용 로그가 분석 도구로 전송될 수 있습니다.',
     ],
     policySafety: [
       '새로운 기능 배포 시 수동 QA를 거칩니다.',
@@ -1287,7 +1291,7 @@ const languageContent = {
     contactIntro: '서비스 운영·정책 관련 문의는 아래 채널로 연락해 주세요. 개인 재정 상담은 제공하지 않습니다.',
     contactOpsTitle: '운영 정보',
     contactSupportTitle: '지원 채널',
-    contactDocsTitle: '정책 문서',
+    contactDocsTitle: '관련 문서',
     contactOps: [
       { label: '운영자', value: 'Lux Lotto Studio · 대표 baek19xx' },
       { label: '위치', value: 'Gyeonggi-do, Republic of Korea' },
@@ -1305,6 +1309,7 @@ const languageContent = {
       },
     ],
     contactDocs: [
+      { label: '사이트 소개', href: './about.html' },
       { label: '이용약관', href: './terms.html' },
       { label: '개인정보 처리방침', href: './privacy.html' },
       { label: 'Responsible Play 가이드', href: './responsible-play.html' },
@@ -1322,6 +1327,7 @@ const languageContent = {
     preparingText: 'Preparing draw...',
     saveButton: 'Save Results',
     meta: 'Hold the button and guide balls through the 12 o’clock collection zone; releasing fills any remaining slots instantly.',
+    mobileControlsHint: 'On mobile, check the draw button and helper text at the bottom of the screen.',
     resultsLabel: 'Results of this round',
     resultsEyebrow: 'RESULTS',
     resultsDisclaimer: 'This simulation does not award monetary prizes.',
@@ -1338,9 +1344,10 @@ const languageContent = {
     modeAriaLabel: 'Select draw mode',
     primaryNavLabel: 'Jump to primary sections',
     footerLinksLabel: 'Footer navigation',
-    footerDocsLabel: 'Policy shortcuts',
+    footerDocsLabel: 'Related documents',
     navLinks: {
       info: 'Overview',
+      about: 'About',
       responsible: 'Responsible Play',
       odds: 'Odds',
       policy: 'Policy',
@@ -1430,8 +1437,8 @@ const languageContent = {
       'Users remain responsible for complying with local lottery regulations.',
     ],
     policyPrivacy: [
-      'No personal data is transmitted to remote servers.',
-      'Saved results stay on your device unless you share them manually.',
+      'Draw results stay on your device and are not uploaded.',
+      'Pseudonymous usage logs may be processed by analytics and ad partners for quality and delivery.',
     ],
     policySafety: [
       'Major releases undergo manual QA and accessibility review.',
@@ -1443,7 +1450,7 @@ const languageContent = {
       'Use the channels below for service and policy inquiries only. We cannot provide personal financial counseling.',
     contactOpsTitle: 'Operator Info',
     contactSupportTitle: 'Support Channels',
-    contactDocsTitle: 'Policy Documents',
+    contactDocsTitle: 'Related Documents',
     contactOps: [
       { label: 'Operator', value: 'Lux Lotto Studio · baek19xx' },
       { label: 'Location', value: 'Gyeonggi-do, Republic of Korea' },
@@ -1461,6 +1468,7 @@ const languageContent = {
       },
     ],
     contactDocs: [
+      { label: 'About the Studio', href: './about.html' },
       { label: 'Terms of Use', href: './terms.html' },
       { label: 'Privacy Policy', href: './privacy.html' },
       { label: 'Responsible Play Guide', href: './responsible-play.html' },
@@ -1477,7 +1485,8 @@ const languageContent = {
     holdPrompt: '抽選中...',
     preparingText: '抽選を準備中...',
     saveButton: '結果を保存',
-    meta: 'ボタンを押しながら12時方向の収集ゾーンに触れたボールは順次記録され、指を離すと残りが一気に完成します。',
+    meta: '12時方向の収集ゾーンに触れている間は即時集計され、離すと残りの番号が完成します。',
+    mobileControlsHint: 'モバイルでは画面下部の抽選開始ボタンと案内文をご確認ください。',
     resultsLabel: '今回の結果',
     resultsEyebrow: '結果',
     resultsDisclaimer: '本サービスはシミュレーションであり、金銭的な報酬は提供しません。',
@@ -1494,9 +1503,10 @@ const languageContent = {
     modeAriaLabel: 'モード選択',
     primaryNavLabel: '主要セクションへのショートカット',
     footerLinksLabel: 'フッターナビゲーション',
-    footerDocsLabel: 'ポリシーページ',
+    footerDocsLabel: '関連ドキュメント',
     navLinks: {
       info: '紹介',
+      about: 'サイト紹介',
       responsible: '責任ある利用',
       odds: '確率',
       policy: 'ポリシー',
@@ -1586,8 +1596,8 @@ const languageContent = {
       '地域の宝くじ規制や年齢制限の遵守は利用者の責任です。',
     ],
     policyPrivacy: [
-      '個人情報はデバイス内にのみ保存され、外部送信しません。',
-      '保存データはユーザー自身が管理できます。',
+      '抽選結果や個人メモは端末内にのみ保存されます。',
+      '品質改善のため匿名化された利用ログが分析・広告パートナーに送信される場合があります。',
     ],
     policySafety: [
       '主要リリース時には手動テストとアクセシビリティ確認を行います。',
@@ -1598,7 +1608,7 @@ const languageContent = {
     contactIntro: '以下の窓口ではサービス運営やポリシーに関する問い合わせのみ受け付けています。個別の財務相談は行いません。',
     contactOpsTitle: '運営情報',
     contactSupportTitle: 'サポートチャネル',
-    contactDocsTitle: 'ポリシー文書',
+    contactDocsTitle: '関連ドキュメント',
     contactOps: [
       { label: '運営', value: 'Lux Lotto Studio · baek19xx' },
       { label: '所在地', value: '韓国 京畿道' },
@@ -1616,6 +1626,7 @@ const languageContent = {
       },
     ],
     contactDocs: [
+      { label: 'サイト紹介', href: './about.html' },
       { label: '利用規約', href: './terms.html' },
       { label: 'プライバシーポリシー', href: './privacy.html' },
       { label: '責任あるプレイガイド', href: './responsible-play.html' },
@@ -1635,6 +1646,7 @@ function handleLanguageChange() {
   if (heroSubtitle) heroSubtitle.textContent = content.subtitle;
   if (saveBtn) saveBtn.textContent = content.saveButton;
   if (metaText) metaText.textContent = content.meta;
+  if (mobileControlsHint) mobileControlsHint.textContent = content.mobileControlsHint || '';
   if (resultsHeading) resultsHeading.textContent = content.resultsLabel;
   if (resultsEyebrow) resultsEyebrow.textContent = content.resultsEyebrow;
   if (resultsDisclaimerEl) resultsDisclaimerEl.textContent = content.resultsDisclaimer || '';
@@ -1645,7 +1657,6 @@ function handleLanguageChange() {
   updateDrawButtonLabel();
   updateHeroDate();
   syncDuplicateToggleState();
-  renderResults();
 }
 
 function updateDrawButtonLabel() {

@@ -577,6 +577,12 @@ select {
   margin: 0;
 }
 
+.meta-text.mobile-hint {
+  display: none;
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
 .results-panel {
   background: var(--surface);
   border-radius: 28px;
@@ -1185,6 +1191,10 @@ select {
   .footer-links {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .meta-text.mobile-hint {
+    display: block;
   }
 
   .scroll-draw-btn {
