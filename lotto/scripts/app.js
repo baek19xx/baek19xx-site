@@ -53,6 +53,14 @@ const infoEyebrow = document.getElementById('infoEyebrow');
 const infoHeading = document.getElementById('infoHeading');
 const infoIntro = document.getElementById('infoIntro');
 const infoGrid = document.getElementById('infoGrid');
+const methodEyebrow = document.getElementById('methodEyebrow');
+const methodHeading = document.getElementById('methodHeading');
+const methodIntro = document.getElementById('methodIntro');
+const methodGrid = document.getElementById('methodGrid');
+const insightEyebrow = document.getElementById('insightEyebrow');
+const insightHeading = document.getElementById('insightHeading');
+const insightIntro = document.getElementById('insightIntro');
+const insightGrid = document.getElementById('insightGrid');
 const responsibleEyebrow = document.getElementById('responsibleEyebrow');
 const responsibleHeading = document.getElementById('responsibleHeading');
 const responsibleIntro = document.getElementById('responsibleIntro');
@@ -87,6 +95,8 @@ const primaryNav = document.querySelector('.primary-nav');
 const footerDocsEl = document.querySelector('.footer-docs');
 const navLinks = {
   info: document.querySelectorAll('[data-nav="info"]'),
+  method: document.querySelectorAll('[data-nav="method"]'),
+  insight: document.querySelectorAll('[data-nav="insight"]'),
   about: document.querySelectorAll('[data-nav="about"]'),
   responsible: document.querySelectorAll('[data-nav="responsible"]'),
   odds: document.querySelectorAll('[data-nav="odds"]'),
@@ -525,9 +535,9 @@ function collectHiddenNumbers(results) {
   return hidden;
 }
 
-function renderInfoCards(items = []) {
-  if (!infoGrid) return;
-  infoGrid.innerHTML = '';
+function renderInfoCards(items = [], gridEl = infoGrid) {
+  if (!gridEl) return;
+  gridEl.innerHTML = '';
   items.forEach((item) => {
     const card = document.createElement('article');
     card.className = 'info-card';
@@ -536,7 +546,7 @@ function renderInfoCards(items = []) {
     const body = document.createElement('p');
     body.textContent = item.body;
     card.append(title, body);
-    infoGrid.appendChild(card);
+    gridEl.appendChild(card);
   });
 }
 
@@ -646,7 +656,17 @@ function updateInformationalSections(content) {
   if (infoEyebrow) infoEyebrow.textContent = fallbackContent.infoEyebrow || '';
   if (infoHeading) infoHeading.textContent = fallbackContent.infoHeading || '';
   if (infoIntro) infoIntro.textContent = fallbackContent.infoIntro || '';
-  renderInfoCards(fallbackContent.infoItems || []);
+  renderInfoCards(fallbackContent.infoItems || [], infoGrid);
+
+  if (methodEyebrow) methodEyebrow.textContent = fallbackContent.methodEyebrow || '';
+  if (methodHeading) methodHeading.textContent = fallbackContent.methodHeading || '';
+  if (methodIntro) methodIntro.textContent = fallbackContent.methodIntro || '';
+  renderInfoCards(fallbackContent.methodItems || [], methodGrid);
+
+  if (insightEyebrow) insightEyebrow.textContent = fallbackContent.insightEyebrow || '';
+  if (insightHeading) insightHeading.textContent = fallbackContent.insightHeading || '';
+  if (insightIntro) insightIntro.textContent = fallbackContent.insightIntro || '';
+  renderInfoCards(fallbackContent.insightItems || [], insightGrid);
 
   if (faqEyebrow) faqEyebrow.textContent = fallbackContent.faqEyebrow || '';
   if (faqHeading) faqHeading.textContent = fallbackContent.faqHeading || '';
@@ -1191,6 +1211,8 @@ const languageContent = {
     footerDocsLabel: '관련 문서 바로가기',
     navLinks: {
       info: '소개',
+      method: '동작 방식',
+      insight: '학습 인사이트',
       about: '사이트 소개',
       responsible: '건강한 이용',
       odds: '확률',
@@ -1205,11 +1227,36 @@ const languageContent = {
     weekdaySuffix: '요일',
     infoEyebrow: 'ABOUT',
     infoHeading: '서비스 소개',
-    infoIntro: '데이터 무결성과 투명한 기록 방식을 바탕으로 로또 추첨 과정을 재현합니다.',
+    infoIntro:
+      '물리 기반 애니메이션과 난수 풀을 결합해 추첨 흐름을 시각화합니다. 결과 저장과 책임 이용 안내까지 한 곳에서 제공합니다.',
     infoItems: [
-      { title: '실시간 시뮬레이션', body: '공의 움직임과 수집 존 동작을 통해 실제 추첨 흐름을 체험할 수 있습니다.' },
-      { title: '다국어 지원', body: '한국어 · 영어 · 일본어 UI와 결과 표기를 동일한 품질로 제공합니다.' },
-      { title: '결과 보관', body: '추첨 결과를 정렬된 텍스트 파일로 저장해 기록 관리에 활용할 수 있습니다.' },
+      { title: '물리 기반 시뮬레이션', body: '공이 튀고 수집 존에 닿는 순간 번호가 확정되어 실제 추첨 흐름을 체험합니다.' },
+      { title: '난수 풀 투명성', body: '1~45 번호 풀을 공개 규칙으로 생성해 번호 생성 과정을 이해할 수 있습니다.' },
+      { title: '단일·5세트 비교', body: '단일 모드와 5세트 모드를 비교하면서 중복 옵션 차이를 확인합니다.' },
+      { title: '결과 저장', body: '완성된 번호를 자동 정렬해 텍스트 파일로 저장할 수 있습니다.' },
+      { title: '다국어 안내', body: '한국어 · 영어 · 일본어로 서비스 가이드와 정책을 동일한 품질로 제공합니다.' },
+      { title: '학습 중심 콘텐츠', body: '확률 해설과 책임 이용 안내를 한 페이지에 모아 참고 자료로 활용할 수 있습니다.' },
+    ],
+    methodEyebrow: 'PROCESS',
+    methodHeading: '시뮬레이션 동작 방식',
+    methodIntro: '추첨이 만들어지는 단계를 공개해 학습 목적의 이해도를 높입니다.',
+    methodItems: [
+      { title: '번호 풀 생성', body: '1~45 번호 풀에서 무작위로 추출하며 5세트 모드는 중복 허용 여부를 선택합니다.' },
+      { title: '수집 존 판정', body: '공이 12시 방향 수집 존에 닿는 순간 번호가 확정됩니다.' },
+      { title: '서비스 번호 분리', body: '메인 6개와 서비스 1개를 구분해 실제 추첨 구조를 따릅니다.' },
+      { title: '자동 정렬', body: '완성된 번호를 오름차순으로 정렬해 비교와 기록을 돕습니다.' },
+      { title: '로컬 기록', body: '결과는 로컬 텍스트 파일로 저장되며 외부로 전송되지 않습니다.' },
+      { title: '난수 기반 초기화', body: '각 공의 속도와 방향은 난수로 초기화되어 무작위성을 시각적으로 확인할 수 있습니다.' },
+    ],
+    insightEyebrow: 'INSIGHTS',
+    insightHeading: '학습 인사이트',
+    insightIntro: '추첨 확률, 모드 차이, 기록 활용법을 한눈에 정리해 학습 자료로 제공합니다.',
+    insightItems: [
+      { title: '균등 확률 구조', body: '1~45 풀에서 매 회차 독립적으로 추첨되므로 모든 조합 확률이 동일합니다.' },
+      { title: '서비스 번호 이해', body: '보너스 번호는 2등 판정 기준을 설명하는 데 활용되며 실제 로또 구조를 반영합니다.' },
+      { title: '중복 옵션 분석', body: '5세트 중복 허용은 세트마다 풀을 재구성해 다중 구매 시나리오를 비교합니다.' },
+      { title: '애니메이션과 결과', body: '공의 움직임은 시각화용이며 수집 존에 닿는 순간 번호가 확정됩니다.' },
+      { title: '로컬 기록 활용', body: '저장된 텍스트 로그로 번호 분포를 살펴보며 개인 학습 노트를 만들 수 있습니다.' },
     ],
     responsibleEyebrow: '건강한 이용',
     responsibleHeading: '건강한 이용 가이드',
@@ -1218,11 +1265,13 @@ const languageContent = {
     responsiblePrinciples: [
       '19세 미만 사용자는 학습·참고 용도로만 이용하고, 실제 복권 구매는 거주지의 법적 제한을 따르세요.',
       '세션 시간을 미리 정하고 주기적으로 휴식해 과몰입을 예방하세요.',
-      '시뮬레이션 결과는 수익을 보장하지 않으며, 복권 구매와 재정 판단은 사용자 책임입니다.',
+      '시뮬레이션 결과는 수익을 보장하지 않으며, 구매 예산과 재정 판단은 사용자 책임입니다.',
+      '결과는 학습·통계 목적의 참고 자료로만 활용하고 예측·추천 도구로 사용하지 마세요.',
+      '결과에 집착하거나 스트레스를 느낄 경우 이용을 중단하고 휴식을 취하세요.',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: '로또 확률 해설',
-    oddsIntro: '각 등위별 당첨 조건과 확률을 알아두면 시뮬레이션 결과를 더욱 현실적으로 해석할 수 있습니다.',
+    oddsIntro: '공식 로또 기준의 등위 조건과 확률을 정리해 결과를 현실적으로 해석할 수 있습니다.',
     oddsItems: [
       { tier: '1등', criteria: '6개 번호 모두 일치', probability: '1 / 8,145,060 (약 0.000012%)' },
       { tier: '2등', criteria: '5개 일치 + 보너스', probability: '1 / 1,357,510 (약 0.000074%)' },
@@ -1232,7 +1281,7 @@ const languageContent = {
     ],
     faqEyebrow: 'FAQ',
     faqHeading: '자주 묻는 질문',
-    faqIntro: '시뮬레이터 운용 방식, 데이터 처리, 책임 범위 등에 대해 가장 자주 받는 질문을 정리했습니다.',
+    faqIntro: '시뮬레이터 원리, 난수 생성, 데이터 처리, 책임 범위를 한눈에 정리했습니다.',
     faqItems: [
       {
         question: '이 결과는 과거 로또 당첨·낙첨 데이터를 바탕으로 하나요?',
@@ -1266,6 +1315,22 @@ const languageContent = {
         question: '저장한 결과 파일이 서버로 업로드되거나 공유되나요?',
         answer:
           '저장 버튼을 누르면 브라우저가 직접 텍스트 파일을 내려받습니다. 파일은 사용자 기기에만 존재하며, 자동 업로드나 공유 기능은 제공하지 않습니다.',
+      },
+      {
+        question: '추첨 애니메이션이 결과를 바꾸나요?',
+        answer: '번호는 공이 수집 존에 닿는 순간에만 확정되며, 이후 애니메이션은 시각화입니다.',
+      },
+      {
+        question: '공 색상은 어떤 의미인가요?',
+        answer: '1~10, 11~20, 21~30, 31~40, 41~45 구간을 색상으로 구분합니다.',
+      },
+      {
+        question: '서비스 번호(보너스)는 어떻게 결정되나요?',
+        answer: '메인 6개가 결정된 뒤 남은 번호 풀에서 1개를 추가 추첨합니다.',
+      },
+      {
+        question: '난수는 어떤 방식으로 생성되나요?',
+        answer: '브라우저 내장 난수 함수로 1~45 번호 풀에서 균등하게 추출합니다.',
       },
     ],
     policyEyebrow: 'POLICY',
@@ -1347,6 +1412,8 @@ const languageContent = {
     footerDocsLabel: 'Related documents',
     navLinks: {
       info: 'Overview',
+      method: 'How It Works',
+      insight: 'Learning Insights',
       about: 'About',
       responsible: 'Responsible Play',
       odds: 'Odds',
@@ -1361,11 +1428,36 @@ const languageContent = {
     weekdaySuffix: '',
     infoEyebrow: 'ABOUT',
     infoHeading: 'What We Offer',
-    infoIntro: 'We recreate the lottery draw journey with transparent physics, data integrity, and multilingual UI.',
+    infoIntro:
+      'We combine physics-driven animation with a transparent number pool to visualize each draw. Save results and review responsible-play guidance in one place.',
     infoItems: [
-      { title: 'Live Simulation', body: 'Watch physics-based balls bounce and enter the 12 o’clock collection zone in real time.' },
-      { title: 'Localized Experience', body: 'Switch seamlessly between Korean, English, and Japanese copy.' },
-      { title: 'Result Export', body: 'Save sorted draw sets as plain-text logs for audit-friendly storage.' },
+      { title: 'Physics-based simulation', body: 'Balls bounce and lock in numbers when they reach the 12 o\'clock collection zone.' },
+      { title: 'Transparent number pool', body: 'Each draw starts from a clear 1–45 pool so the selection logic is understandable.' },
+      { title: 'Single vs five-set', body: 'Compare single draws with five-set scenarios and duplicate options.' },
+      { title: 'Result export', body: 'Sorted results can be saved as local text logs for personal tracking.' },
+      { title: 'Multilingual guidance', body: 'Key explanations and policies are offered in Korean, English, and Japanese.' },
+      { title: 'Learning-first overview', body: 'Odds guidance and responsible-play notes live together as a study reference.' },
+    ],
+    methodEyebrow: 'PROCESS',
+    methodHeading: 'How the Simulation Works',
+    methodIntro: 'We document each step of the draw so you can understand the mechanics and probabilities.',
+    methodItems: [
+      { title: 'Number pool creation', body: 'Each set draws randomly from 1–45, and five-set mode lets you allow duplicates.' },
+      { title: 'Collection-zone capture', body: 'Numbers are confirmed when balls reach the 12 o\'clock collection zone.' },
+      { title: 'Main vs service ball', body: 'Six main numbers are separated from one service (bonus) ball.' },
+      { title: 'Automatic sorting', body: 'Final numbers are sorted to make comparison easier.' },
+      { title: 'Local records', body: 'Results stay on your device and can be saved as text files.' },
+      { title: 'Randomized motion', body: 'Each ball starts with randomized speed and direction to visualize randomness.' },
+    ],
+    insightEyebrow: 'INSIGHTS',
+    insightHeading: 'Learning Insights',
+    insightIntro: 'We summarize probability, mode differences, and record-keeping so the simulator doubles as a study aid.',
+    insightItems: [
+      { title: 'Uniform probability', body: 'Each draw samples independently from 1–45, so every combination is equally likely.' },
+      { title: 'Service ball context', body: 'The bonus ball clarifies 2nd-prize criteria and mirrors real lotto structure.' },
+      { title: 'Duplicate-mode analysis', body: 'Allowing duplicates rebuilds the pool each set to compare multi-ticket scenarios.' },
+      { title: 'Animation vs result', body: 'Motion is visual; numbers lock in only when a ball reaches the collection zone.' },
+      { title: 'Local learning logs', body: 'Saved text logs help you review number distributions and personal notes.' },
     ],
     responsibleEyebrow: 'RESPONSIBLE PLAY',
     responsibleHeading: 'Responsible Play Guide',
@@ -1374,11 +1466,13 @@ const languageContent = {
     responsiblePrinciples: [
       'Users under 19 should only explore the tool for learning, and all real-world purchases must follow local laws.',
       'Define session limits and take frequent breaks to avoid over-immersion.',
-      'Simulation outputs never guarantee profit; lottery spending and financial choices remain your responsibility.',
+      'Simulation outputs never guarantee profit; lottery budgets and financial choices remain your responsibility.',
+      'Use results for learning and analysis only—do not treat them as prediction or recommendation tools.',
+      'Pause use and take a break if the results cause stress or obsessive checking.',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: 'Understanding Lotto Odds',
-    oddsIntro: 'Reference the official prize tiers and odds to ground your expectations while experimenting.',
+    oddsIntro: 'Review official prize tiers and odds to interpret outcomes realistically.',
     oddsItems: [
       { tier: '1st Prize', criteria: 'Match 6 numbers', probability: '1 / 8,145,060 (~0.000012%)' },
       { tier: '2nd Prize', criteria: 'Match 5 + Bonus', probability: '1 / 1,357,510 (~0.000074%)' },
@@ -1388,7 +1482,7 @@ const languageContent = {
     ],
     faqEyebrow: 'FAQ',
     faqHeading: 'Frequently Asked Questions',
-    faqIntro: 'Learn how the simulator handles data, probabilities, and accountability before you run extended draws.',
+    faqIntro: 'Learn about the simulation logic, randomization, and data handling in one place.',
     faqItems: [
       {
         question: 'Does the simulator rely on historical winning numbers?',
@@ -1424,6 +1518,22 @@ const languageContent = {
         question: 'Are exported logs automatically synced anywhere?',
         answer:
           'Exports are simple plain-text files saved locally. You control if and how they are shared.',
+      },
+      {
+        question: 'Does the animation change the outcome?',
+        answer: 'Numbers are locked in only when a ball reaches the collection zone; the rest is visual.',
+      },
+      {
+        question: 'What do the ball colors represent?',
+        answer: 'Colors group number ranges (1–10, 11–20, 21–30, 31–40, 41–45).',
+      },
+      {
+        question: 'How is the service (bonus) ball chosen?',
+        answer: 'After the six main numbers are picked, one additional number is drawn from the remaining pool.',
+      },
+      {
+        question: 'How is randomness generated?',
+        answer: 'The browser\'s built-in random function selects numbers uniformly from the 1–45 pool.',
       },
     ],
     policyEyebrow: 'POLICY',
@@ -1506,6 +1616,8 @@ const languageContent = {
     footerDocsLabel: '関連ドキュメント',
     navLinks: {
       info: '紹介',
+      method: '動作方式',
+      insight: '学習インサイト',
       about: 'サイト紹介',
       responsible: '責任ある利用',
       odds: '確率',
@@ -1520,11 +1632,36 @@ const languageContent = {
     weekdaySuffix: '曜',
     infoEyebrow: 'ABOUT',
     infoHeading: 'サービス概要',
-    infoIntro: '透明性の高い物理シミュレーションと多言語UIで抽選体験を再現します。',
+    infoIntro:
+      '物理演算アニメーションと番号プールの透明性で抽選の流れを可視化します。結果保存と責任ある利用の案内までまとめて提供します。',
     infoItems: [
-      { title: 'ライブシミュレーション', body: '物理演算されたボールが12時方向のゾーンに入る様子をリアルタイムで確認できます。' },
-      { title: '多言語表示', body: '韓国語・英語・日本語に即座に切り替え可能です。' },
-      { title: '結果保存', body: '並び替え済みの抽選結果をテキストに保存し、記録として活用できます。' },
+      { title: '物理ベースのシミュレーション', body: 'ボールが跳ねて収集ゾーンに触れた時点で番号が確定します。' },
+      { title: '番号プールの透明性', body: '1〜45のプールを明確なルールで生成し、抽選ロジックを理解できます。' },
+      { title: '1セット・5セット比較', body: '単一モードと5セットモードで重複オプションを比較できます。' },
+      { title: '結果保存', body: '整列済みの結果をテキストとして保存できます。' },
+      { title: '多言語ガイド', body: '韓国語・英語・日本語で主要な説明とポリシーを提供します。' },
+      { title: '学習向けコンテンツ', body: '確率の解説と責任ある利用の案内を1ページにまとめ、参考資料として使えます。' },
+    ],
+    methodEyebrow: 'PROCESS',
+    methodHeading: 'シミュレーションの動作方式',
+    methodIntro: '抽選が生成されるステップを公開し、学習目的の理解を深めます。',
+    methodItems: [
+      { title: '番号プール生成', body: '1〜45のプールからランダムに抽選し、5セットモードでは重複許可を選べます。' },
+      { title: '収集ゾーン判定', body: 'ボールが12時方向の収集ゾーンに触れた瞬間に番号が確定します。' },
+      { title: 'メイン/サービス番号', body: 'メイン6個とサービス1個を分けて表示します。' },
+      { title: '自動整列', body: '完成した番号を昇順に整列し、比較しやすくします。' },
+      { title: 'ローカル記録', body: '結果は端末内に保持され、テキストファイルとして保存できます。' },
+      { title: 'ランダム初期化', body: '各ボールの速度と方向は乱数で初期化され、動きのランダム性を可視化します。' },
+    ],
+    insightEyebrow: 'INSIGHTS',
+    insightHeading: '学習インサイト',
+    insightIntro: '抽選確率、モード差、記録の活用法を整理し、学習資料として提供します。',
+    insightItems: [
+      { title: '均等確率構造', body: '1〜45のプールから毎回独立して抽選するため、すべての組み合わせの確率は同じです。' },
+      { title: 'サービス番号の理解', body: 'ボーナス番号は2等判定の基準を説明するための要素で、実際のロト構造を反映します。' },
+      { title: '重複オプション比較', body: '重複許可ではセットごとにプールを再構成し、複数購入のシナリオを比較できます。' },
+      { title: 'アニメーションと結果', body: '動きは視覚化であり、収集ゾーンに触れた瞬間に番号が確定します。' },
+      { title: 'ローカル記録活用', body: '保存したテキストログで番号分布を確認し、学習メモとして使えます。' },
     ],
     responsibleEyebrow: 'RESPONSIBLE PLAY',
     responsibleHeading: '責任ある利用ガイド',
@@ -1533,11 +1670,13 @@ const languageContent = {
     responsiblePrinciples: [
       '19歳未満の利用者は学習・参考目的に限り、現実の宝くじ購入は各地域の法令を優先してください。',
       'セッション時間を決め、こまめに休憩を取り過度な没入を防ぎましょう。',
-      '結果は収益を保証しません。実際の購入や金銭判断は利用者ご自身の責任です。',
+      '結果は収益を保証しません。購入予算や金銭判断は利用者ご自身の責任です。',
+      '結果は学習・統計目的の参考にとどめ、予測・推薦ツールとして使わないでください。',
+      '結果に執着したりストレスを感じたら利用を中断し休憩してください。',
     ],
     oddsEyebrow: 'ODDS',
     oddsHeading: 'ロト確率ガイド',
-    oddsIntro: '各等級の条件と当選確率を把握すると、シミュレーション結果の意味を理解しやすくなります。',
+    oddsIntro: '公式ロトの等級条件と確率を確認して、結果を現実的に解釈しましょう。',
     oddsItems: [
       { tier: '1等', criteria: '6個すべて一致', probability: '1 / 8,145,060 (約0.000012%)' },
       { tier: '2等', criteria: '5個一致 + ボーナス', probability: '1 / 1,357,510 (約0.000074%)' },
@@ -1547,7 +1686,7 @@ const languageContent = {
     ],
     faqEyebrow: 'FAQ',
     faqHeading: 'よくある質問',
-    faqIntro: 'データの扱い・確率・責任範囲など、運営によく寄せられる質問をまとめています。',
+    faqIntro: 'シミュレーターの仕組み、乱数、データ扱いについてまとめています。',
     faqItems: [
       {
         question: '抽選は過去の当選番号をもとに再現していますか？',
@@ -1583,6 +1722,22 @@ const languageContent = {
         question: '保存した結果ファイルは自動で共有されますか？',
         answer:
           'いいえ。テキストファイルとしてローカルに保存されるだけで、自動送信や共有機能はありません。',
+      },
+      {
+        question: '抽選アニメーションが結果に影響しますか？',
+        answer: '番号は収集ゾーンに触れた瞬間に確定し、その後の動きは視覚化です。',
+      },
+      {
+        question: 'ボールの色は何を示していますか？',
+        answer: '1〜10、11〜20、21〜30、31〜40、41〜45の範囲を色で区分しています。',
+      },
+      {
+        question: 'サービス番号（ボーナス）はどのように決まりますか？',
+        answer: 'メイン6個が決まった後、残りのプールから1個を追加抽選します。',
+      },
+      {
+        question: '乱数はどのように生成されますか？',
+        answer: 'ブラウザの乱数関数で1〜45のプールから均等に抽出します。',
       },
     ],
     policyEyebrow: 'POLICY',
