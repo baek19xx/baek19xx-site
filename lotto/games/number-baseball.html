@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>숫자 야구 - Lux Lotto Studio</title>
+  <meta name="description" content="3자리 숫자를 맞추는 숫자 야구 게임입니다." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-WKK1PHMNVP');
+  </script>
+  <link rel="stylesheet" href="./games-common.css" />
+  <script src="./games-common.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../">Lux Lotto Studio</a>
+      <nav class="nav-links">
+        <a href="../">홈</a>
+        <a href="./">게임 목록</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="game-container">
+      <h1 class="game-title">숫자 야구</h1>
+      <p class="game-desc">1~9 중복 없는 3자리 숫자를 맞혀보세요. (예: 123, 759)</p>
+      <input id="guess" class="guess-input" type="tel" maxlength="3" placeholder="예: 123" />
+      <br />
+      <button id="guessBtn" class="btn">확인</button>
+      <button id="newGameBtn" class="btn secondary">새 게임</button>
+      <div id="result" class="result-box" style="min-height:auto;">숫자를 입력하고 확인을 눌러주세요</div>
+      <div id="history" class="history" style="max-height: 200px; overflow:auto;">
+        <h3 style="font-size:1rem; margin-bottom:0.5rem;">입력 기록</h3>
+        <ul id="historyList" style="list-style:none; padding:0; margin:0;"></ul>
+      </div>
+      <p class="stats" id="stats"></p>
+    </div>
+    <a class="back-link" href="./">← 게임 목록으로</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Lux Lotto Studio. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const guessInput = document.getElementById('guess');
+    const guessBtn = document.getElementById('guessBtn');
+    const newGameBtn = document.getElementById('newGameBtn');
+    const result = document.getElementById('result');
+    const historyList = document.getElementById('historyList');
+    const stats = document.getElementById('stats');
+
+    let answer = [];
+    let started = false;
+    let won = false;
+
+    function makeAnswer() {
+      const pool = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const shuffled = window.MiniGame ? window.MiniGame.shuffle(pool) : pool.sort(() => Math.random() - 0.5);
+      answer = shuffled.slice(0, 3);
+      started = false;
+      won = false;
+      historyList.innerHTML = '';
+      result.textContent = '숫자를 입력하고 확인을 눌러주세요';
+      guessInput.value = '';
+      guessInput.disabled = false;
+      guessBtn.disabled = false;
+      updateStats();
+    }
+
+    function validate(input) {
+      if (!/^\d{3}$/.test(input)) return false;
+      const digits = input.split('').map(Number);
+      const unique = new Set(digits);
+      if (unique.size !== 3) return false;
+      if (digits.some((d) => d === 0)) return false;
+      return true;
+    }
+
+    function check(guess) {
+      const g = guess.split('').map(Number);
+      let strike = 0;
+      let ball = 0;
+      for (let i = 0; i < 3; i++) {
+        if (g[i] === answer[i]) {
+          strike++;
+        } else if (answer.includes(g[i])) {
+          ball++;
+        }
+      }
+      return { strike, ball };
+    }
+
+    function updateStats() {
+      if (!window.MiniGame) return;
+      const counts = window.MiniGame.getPlayCounts();
+      const mine = counts.find((c) => c.game === 'number-baseball');
+      stats.textContent = mine ? `총 플레이 횟수: ${mine.plays}회` : '';
+    }
+
+    guessBtn.addEventListener('click', () => {
+      const value = guessInput.value.trim();
+      if (!validate(value)) {
+        result.textContent = '1~9 중복 없는 3자리 숫자를 입력해주세요. (예: 123)';
+        return;
+      }
+      if (!started) {
+        started = true;
+        if (window.MiniGame) window.MiniGame.track('number-baseball', 'play');
+      }
+
+      const { strike, ball } = check(value);
+      const li = document.createElement('li');
+      li.textContent = `${value} → ${strike}스트라이크 ${ball}볼`;
+      li.style.padding = '0.35rem 0';
+      li.style.borderBottom = '1px solid #f3f4f6';
+      historyList.prepend(li);
+
+      if (strike === 3) {
+        won = true;
+        result.textContent = `정답! ${answer.join('')}입니다. 🎉`;
+        guessInput.disabled = true;
+        guessBtn.disabled = true;
+        if (window.MiniGame) window.MiniGame.track('number-baseball', 'result', { result: 'win' });
+      } else {
+        result.textContent = `${strike}스트라이크 ${ball}볼`;
+      }
+      updateStats();
+    });
+
+    newGameBtn.addEventListener('click', () => {
+      if (window.MiniGame && started && !won) {
+        window.MiniGame.track('number-baseball', 'result', { result: 'abandoned' });
+      }
+      makeAnswer();
+    });
+
+    makeAnswer();
+  </script>
+</body>
+</html>

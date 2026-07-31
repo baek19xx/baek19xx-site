@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>동전 던지기 - Lux Lotto Studio</title>
+  <meta name="description" content="동전을 던져 앞면과 뒷면 중 하나를 무작위로 선택합니다." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-WKK1PHMNVP');
+  </script>
+  <link rel="stylesheet" href="./games-common.css" />
+  <script src="./games-common.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../">Lux Lotto Studio</a>
+      <nav class="nav-links">
+        <a href="../">홈</a>
+        <a href="./">게임 목록</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="game-container">
+      <h1 class="game-title">동전 던지기</h1>
+      <p class="game-desc">아래 동전을 누르면 앞면 또는 뒷면이 무작위로 결정됩니다.</p>
+      <div id="coin" class="coin" title="동전 던지기" style="font-size: 2.5rem; width: 100px; height: 100px;">🪙</div>
+      <div id="result" class="result-box">동전을 눌러 시작하세요</div>
+      <p class="stats" id="stats"></p>
+    </div>
+    <a class="back-link" href="./">← 게임 목록으로</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Lux Lotto Studio. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const coin = document.getElementById('coin');
+    const result = document.getElementById('result');
+    const stats = document.getElementById('stats');
+
+    function updateStats() {
+      if (!window.MiniGame) return;
+      const counts = window.MiniGame.getPlayCounts();
+      const mine = counts.find((c) => c.game === 'coin-flip');
+      stats.textContent = mine ? `총 플레이 횟수: ${mine.plays}회` : '';
+    }
+
+    coin.addEventListener('click', () => {
+      if (window.MiniGame) window.MiniGame.track('coin-flip', 'play');
+      const head = Math.random() < 0.5;
+      coin.textContent = head ? '앞' : '뒤';
+      coin.className = 'coin ' + (head ? 'heads' : 'tails');
+      coin.style.fontSize = '2.5rem';
+      coin.style.width = '100px';
+      coin.style.height = '100px';
+      result.textContent = head ? '앞면입니다!' : '뒷면입니다!';
+      if (window.MiniGame) {
+        window.MiniGame.track('coin-flip', 'result', { result: head ? 'heads' : 'tails' });
+      }
+      updateStats();
+    });
+
+    updateStats();
+  </script>
+</body>
+</html>

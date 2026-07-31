@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미니 게임 - Lux Lotto Studio</title>
+  <meta name="description" content="간단한 미니 게임 모음 - 동전, 주사위, 가위바위보, 숫자 야구, 틱택토를 즐겨보세요." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-WKK1PHMNVP');
+  </script>
+  <link rel="stylesheet" href="./games-common.css" />
+  <script src="./games-common.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../">Lux Lotto Studio</a>
+      <nav class="nav-links">
+        <a href="../">홈</a>
+        <a href="./">게임 목록</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1>미니 게임 놀이터</h1>
+    <p class="subtitle">
+      잠깐씩 즐길 수 있는 간단한 게임 모음입니다. 플레이 통계는 브라우저에 저장되며, Google Analytics 이벤트로도 수집됩니다.
+    </p>
+
+    <div id="todayPick" class="game-card" style="margin-bottom: 1.5rem;">
+      <h3>오늘의 랜덤 추천</h3>
+      <p id="todayPickText">추천 게임을 불러오는 중...</p>
+      <a id="todayPickLink" class="play-btn" href="#">바로가기</a>
+    </div>
+
+    <h2>게임 목록</h2>
+    <div class="game-grid" id="gameGrid"></div>
+
+    <h2>내 플레이 통계</h2>
+    <div id="statsList" class="game-card" style="min-height: 120px;">
+      <p>아직 플레이 기록이 없습니다.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Lux Lotto Studio. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const games = [
+      { id: 'coin-flip', title: '동전 던지기', desc: '앞면? 뒷면? 간단한 운명의 선택!', path: './coin-flip.html' },
+      { id: 'dice', title: '주사위 굴리기', desc: '1개부터 6개까지 원하는 만큼 굴려보세요.', path: './dice.html' },
+      { id: 'rock-paper-scissors', title: '가위바위보', desc: '컴퓨터와의 운명의 대결!', path: './rock-paper-scissors.html' },
+      { id: 'number-baseball', title: '숫자 야구', desc: '3자리 숫자를 맞춰보세요.', path: './number-baseball.html' },
+      { id: 'tic-tac-toe', title: '틱택토', desc: '컴퓨터 AI와 3x3 승부.', path: './tic-tac-toe.html' },
+    ];
+
+    const grid = document.getElementById('gameGrid');
+    games.forEach((g) => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.innerHTML = `
+        <h3>${g.title}</h3>
+        <p>${g.desc}</p>
+        <a class="play-btn" href="${g.path}">플레이</a>
+      `;
+      grid.appendChild(card);
+    });
+
+    const pick = games[Math.floor(Math.random() * games.length)];
+    document.getElementById('todayPickText').textContent = `${pick.title} - ${pick.desc}`;
+    document.getElementById('todayPickLink').href = pick.path;
+
+    if (window.MiniGame) {
+      window.MiniGame.renderStatsList(document.getElementById('statsList'));
+    }
+  </script>
+</body>
+</html>

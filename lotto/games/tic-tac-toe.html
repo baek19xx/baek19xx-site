@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>틱택토 - Lux Lotto Studio</title>
+  <meta name="description" content="컴퓨터 AI와 틱택토를 즐겨보세요." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-WKK1PHMNVP');
+  </script>
+  <link rel="stylesheet" href="./games-common.css" />
+  <script src="./games-common.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../">Lux Lotto Studio</a>
+      <nav class="nav-links">
+        <a href="../">홈</a>
+        <a href="./">게임 목록</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="game-container">
+      <h1 class="game-title">틱택토</h1>
+      <p class="game-desc">3x3 판에서 컴퓨터 AI와 겨루세요. 당신은 X, AI는 O입니다.</p>
+      <div id="result" class="result-box" style="min-height:auto;">보드에서 칸을 선택하세요</div>
+      <div id="board" class="board"></div>
+      <button id="newGameBtn" class="btn">새 게임</button>
+      <p class="stats" id="stats"></p>
+    </div>
+    <a class="back-link" href="./">← 게임 목록으로</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Lux Lotto Studio. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const boardEl = document.getElementById('board');
+    const result = document.getElementById('result');
+    const newGameBtn = document.getElementById('newGameBtn');
+    const stats = document.getElementById('stats');
+
+    let cells = [];
+    let gameActive = false;
+    let human = 'X';
+    let ai = 'O';
+
+    const winLines = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6],
+    ];
+
+    function initBoard() {
+      boardEl.innerHTML = '';
+      cells = Array(9).fill('');
+      gameActive = true;
+      result.textContent = '보드에서 칸을 선택하세요';
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.index = i;
+        cell.addEventListener('click', () => handleHuman(i));
+        boardEl.appendChild(cell);
+      }
+      if (window.MiniGame) window.MiniGame.track('tic-tac-toe', 'play');
+      updateStats();
+    }
+
+    function render() {
+      const cellEls = boardEl.querySelectorAll('.cell');
+      cells.forEach((val, i) => {
+        cellEls[i].textContent = val;
+        cellEls[i].classList.toggle('taken', !!val);
+      });
+    }
+
+    function checkWinner(state) {
+      for (const [a, b, c] of winLines) {
+        if (state[a] && state[a] === state[b] && state[a] === state[c]) {
+          return state[a];
+        }
+      }
+      if (state.every(Boolean)) return 'draw';
+      return null;
+    }
+
+    function handleHuman(i) {
+      if (!gameActive || cells[i]) return;
+      cells[i] = human;
+      render();
+      const winner = checkWinner(cells);
+      if (winner) return endGame(winner);
+      aiMove();
+    }
+
+    function endGame(winner) {
+      gameActive = false;
+      let message = '';
+      let resultKey = '';
+      if (winner === human) {
+        message = '축하합니다! 이겼습니다. 🎉';
+        resultKey = 'win';
+      } else if (winner === ai) {
+        message = '컴퓨터가 이겼습니다. 😅';
+        resultKey = 'lose';
+      } else {
+        message = '비겼습니다. 🤝';
+        resultKey = 'draw';
+      }
+      result.textContent = message;
+      if (window.MiniGame) {
+        window.MiniGame.track('tic-tac-toe', 'result', { result: resultKey });
+      }
+      updateStats();
+    }
+
+    function aiMove() {
+      if (!gameActive) return;
+      const best = findBestMove();
+      cells[best] = ai;
+      render();
+      const winner = checkWinner(cells);
+      if (winner) endGame(winner);
+    }
+
+    function findBestMove() {
+      // 1. AI can win
+      for (let i = 0; i < 9; i++) {
+        if (cells[i]) continue;
+        const test = cells.slice();
+        test[i] = ai;
+        if (checkWinner(test) === ai) return i;
+      }
+      // 2. Block human win
+      for (let i = 0; i < 9; i++) {
+        if (cells[i]) continue;
+        const test = cells.slice();
+        test[i] = human;
+        if (checkWinner(test) === human) return i;
+      }
+      // 3. Center > corner > edge
+      if (!cells[4]) return 4;
+      const corners = [0, 2, 6, 8].sort(() => Math.random() - 0.5);
+      for (const c of corners) if (!cells[c]) return c;
+      const edges = [1, 3, 5, 7].sort(() => Math.random() - 0.5);
+      for (const e of edges) if (!cells[e]) return e;
+      return cells.findIndex((v) => !v);
+    }
+
+    function updateStats() {
+      if (!window.MiniGame) return;
+      const counts = window.MiniGame.getPlayCounts();
+      const mine = counts.find((c) => c.game === 'tic-tac-toe');
+      stats.textContent = mine ? `총 플레이 횟수: ${mine.plays}회` : '';
+    }
+
+    newGameBtn.addEventListener('click', initBoard);
+
+    initBoard();
+  </script>
+</body>
+</html>
