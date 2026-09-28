@@ -14,15 +14,10 @@
       gtag('js', new Date());
       gtag('config', 'G-WKK1PHMNVP');
     </script>
-    <!-- AdSense loader — the game page gets Auto ads eligibility too.
-         A manual display unit can be dropped into .gp-ad below once a
-         data-ad-slot is issued in the AdSense console. -->
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5668095080661070"
-      crossorigin="anonymous"
-    ></script>
-    <style>html,body{background:#0b0b12;height:100%;margin:0;padding:0}body{flex-direction:column;height:100dvh;font-family:Segoe UI,Malgun Gothic,sans-serif;display:flex}.gp-top{box-sizing:border-box;background:#120e24;border-bottom:1px solid #2a1f4d;flex:0 0 46px;align-items:center;gap:10px;height:46px;padding:0 12px;display:flex}.gp-back{color:#c2d4ee;white-space:nowrap;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;text-decoration:none;transition:background .15s}.gp-back:hover{color:#fff;background:#231646}.gp-title{text-align:center;letter-spacing:3px;color:#8f7ae0;text-overflow:ellipsis;white-space:nowrap;flex:1;font:700 13px/1 Trebuchet MS,Segoe UI,sans-serif;overflow:hidden}.gp-fs{cursor:pointer;color:#c2d4ee;white-space:nowrap;background:#1d1440;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;transition:background .15s}.gp-fs:hover{color:#fff;background:#2c1d5e}.gp-stage{background:#000;flex:1;min-height:0;position:relative}.gp-stage:fullscreen{background:#000}#game{justify-content:center;align-items:center;display:flex;position:absolute;inset:0}.gp-ad{flex:none}.gp-ad:not(:empty){background:#0d0a18;border-top:1px solid #2a1f4d;justify-content:center;align-items:center;min-height:110px;display:flex}</style>
+    <!-- AdSense loader is injected by the AD_SLOT block at the bottom —
+         only when a slot id is configured, so Auto ads can't flood the
+         game page before manual units are in place. -->
+    <style>html,body{background:#0b0b12;height:100%;margin:0;padding:0}body{flex-direction:column;height:100dvh;font-family:Segoe UI,Malgun Gothic,sans-serif;display:flex}.gp-top{box-sizing:border-box;background:#120e24;border-bottom:1px solid #2a1f4d;flex:0 0 46px;align-items:center;gap:10px;height:46px;padding:0 12px;display:flex}.gp-back{color:#c2d4ee;white-space:nowrap;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;text-decoration:none;transition:background .15s}.gp-back:hover{color:#fff;background:#231646}.gp-title{text-align:center;letter-spacing:3px;color:#8f7ae0;text-overflow:ellipsis;white-space:nowrap;flex:1;font:700 13px/1 Trebuchet MS,Segoe UI,sans-serif;overflow:hidden}.gp-fs{cursor:pointer;color:#c2d4ee;white-space:nowrap;background:#1d1440;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;transition:background .15s}.gp-fs:hover{color:#fff;background:#2c1d5e}.gp-mid{flex:1;min-height:0;display:flex}.gp-rail{background:#0d0a18;flex:0 0 160px}.gp-rail:empty{display:none}.gp-rail:first-child{border-right:1px solid #2a1f4d}.gp-rail:last-child{border-left:1px solid #2a1f4d}.gp-stage{background:#000;flex:1;min-width:0;position:relative}.gp-stage:fullscreen{background:#000}#game{justify-content:center;align-items:center;display:flex;position:absolute;inset:0}.gp-ad{flex:none}.gp-ad:not(:empty){background:#0d0a18;border-top:1px solid #2a1f4d;justify-content:center;align-items:center;min-height:100px;display:flex}</style>
     <script type="module" crossorigin src="./assets/index-DO3fTCxu.js"></script>
   </head>
   <body>
@@ -31,23 +26,48 @@
       <span class="gp-title">SLIME SURVIVORS</span>
       <button class="gp-fs" id="fsBtn" type="button">⛶ 전체화면</button>
     </header>
-    <main class="gp-stage" id="stage">
-      <div id="game"></div>
-    </main>
-    <aside class="gp-ad" aria-label="광고">
-      <!-- Manual display unit — paste the issued data-ad-slot and uncomment:
-      <ins
-        class="adsbygoogle"
-        style="display: block; width: 100%; height: 100px"
-        data-ad-client="ca-pub-5668095080661070"
-        data-ad-slot="XXXXXXXXXX"
-        data-ad-format="horizontal"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      -->
-    </aside>
+    <div class="gp-mid">
+      <aside class="gp-rail" id="adL"></aside>
+      <main class="gp-stage" id="stage">
+        <div id="game"></div>
+      </main>
+      <aside class="gp-rail" id="adR"></aside>
+    </div>
+    <aside class="gp-ad" id="adB"></aside>
     <script>
+      // Paste the AdSense display-unit slot id here to activate ads on
+      // this page (one unit can serve all three slots — left/right/bottom).
+      var AD_SLOT = '';
+      (function () {
+        if (!AD_SLOT) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.crossOrigin = 'anonymous';
+        s.src =
+          'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5668095080661070';
+        document.head.appendChild(s);
+        function inject(el, format, width) {
+          if (!el) return;
+          var ins = document.createElement('ins');
+          ins.className = 'adsbygoogle';
+          ins.style.display = 'block';
+          ins.style.width = width;
+          ins.style.height = '100%';
+          ins.setAttribute('data-ad-client', 'ca-pub-5668095080661070');
+          ins.setAttribute('data-ad-slot', AD_SLOT);
+          ins.setAttribute('data-ad-format', format);
+          el.appendChild(ins);
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        }
+        // Side rails only when the window is wide enough to spare 160px
+        // per side without crushing the playfield.
+        if (window.innerWidth >= 900) {
+          inject(document.getElementById('adL'), 'vertical', '160px');
+          inject(document.getElementById('adR'), 'vertical', '160px');
+        }
+        inject(document.getElementById('adB'), 'horizontal', '100%');
+      })();
+
       // Fullscreen toggle — the stage element goes fullscreen so the
       // letterboxed canvas keeps its dark surround.
       document.getElementById('fsBtn').addEventListener('click', function () {
