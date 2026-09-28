@@ -128,6 +128,81 @@ a {
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
 }
 
+/* genre dropdown */
+.has-sub {
+  position: relative;
+  display: inline-flex;
+}
+.subnav {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 60;
+  flex-direction: column;
+  min-width: 170px;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.2);
+}
+.has-sub:hover .subnav,
+.has-sub:focus-within .subnav {
+  display: flex;
+}
+.subnav a {
+  padding: 9px 12px !important;
+  border-radius: 4px;
+}
+.subnav .sub-genre {
+  font-family: var(--pixel);
+  font-size: 0.48rem;
+  color: var(--magenta);
+  letter-spacing: 2px;
+  padding: 8px 12px 4px;
+  text-shadow: 0 0 8px rgba(255, 43, 214, 0.5);
+}
+.subnav a .sub-note {
+  display: block;
+  font-size: 0.7rem;
+  color: #5a6285;
+}
+
+/* ===== genre blocks ===== */
+.genre-block {
+  margin-bottom: 34px;
+}
+.genre-tag {
+  display: inline-block;
+  font-family: var(--pixel);
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  margin: 0 0 16px;
+  padding: 7px 12px;
+  border: 1px solid;
+  border-radius: 4px;
+}
+.genre-tag.c { color: var(--cyan); border-color: rgba(0, 240, 255, 0.5); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
+.genre-tag.m { color: var(--magenta); border-color: rgba(255, 43, 214, 0.5); text-shadow: 0 0 8px rgba(255, 43, 214, 0.5); }
+.genre-count {
+  color: var(--muted);
+  text-shadow: none;
+  margin-left: 8px;
+}
+.genre-all {
+  margin: 14px 0 0;
+  font-size: 0.83rem;
+}
+.genre-all a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.genre-all a:hover {
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
 /* ===== hero — attract mode ===== */
 .hero {
   text-align: center;
