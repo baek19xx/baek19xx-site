@@ -1285,7 +1285,7 @@ const languageContent = {
     faqItems: [
       {
         question: '이 결과는 과거 로또 당첨·낙첨 데이터를 바탕으로 하나요?',
-        answer: '아니요. Lux Lotto Studio는 매 세트마다 새 번호 풀을 무작위로 생성합니다. 실제 회차 기록이나 외부 통계를 불러오지 않습니다.',
+        answer: '아니요. 럭스 로또 추첨기는 매 세트마다 새 번호 풀을 무작위로 생성합니다. 실제 회차 기록이나 외부 통계를 불러오지 않습니다.',
       },
       {
         question: '과거 데이터와 동기화하지 않으면 확률이 달라지지 않나요?',
@@ -1341,7 +1341,7 @@ const languageContent = {
     policySafetyTitle: '서비스 안전',
     policyLegal: [
       '본 서비스는 가상 시뮬레이터이며 복권 당첨을 보장하지 않습니다.',
-      '모든 저작물은 Lux Lotto Studio 소유 또는 사용 허가 범위 내에서 제공됩니다.',
+      '모든 저작물은 PRESS START 소유 또는 사용 허가 범위 내에서 제공됩니다.',
     ],
     policyPrivacy: [
       '추첨 결과와 개인 기록은 로컬에만 저장됩니다.',
@@ -1358,7 +1358,7 @@ const languageContent = {
     contactSupportTitle: '지원 채널',
     contactDocsTitle: '관련 문서',
     contactOps: [
-      { label: '운영자', value: 'Lux Lotto Studio · 대표 baek19xx' },
+      { label: '운영자', value: 'PRESS START · 대표 baek19xx' },
       { label: '위치', value: 'Gyeonggi-do, Republic of Korea' },
       { label: '서비스 형태', value: '웹 기반 로또 시뮬레이터' },
     ],
@@ -1505,7 +1505,7 @@ const languageContent = {
           'No. Results exist only in your browser session and optional text exports. Nothing is uploaded or tracked remotely.',
       },
       {
-        question: 'Is Lux Lotto Studio accountable for real-world wins or losses?',
+        question: 'Is PRESS START accountable for real-world wins or losses?',
         answer:
           'We provide an educational simulator. Financial decisions and actual lottery purchases remain your responsibility.',
       },
@@ -1562,7 +1562,7 @@ const languageContent = {
     contactSupportTitle: 'Support Channels',
     contactDocsTitle: 'Related Documents',
     contactOps: [
-      { label: 'Operator', value: 'Lux Lotto Studio · baek19xx' },
+      { label: 'Operator', value: 'PRESS START · baek19xx' },
       { label: 'Location', value: 'Gyeonggi-do, Republic of Korea' },
       { label: 'Service', value: 'Web-based lottery simulator' },
     ],
@@ -1765,7 +1765,7 @@ const languageContent = {
     contactSupportTitle: 'サポートチャネル',
     contactDocsTitle: '関連ドキュメント',
     contactOps: [
-      { label: '運営', value: 'Lux Lotto Studio · baek19xx' },
+      { label: '運営', value: 'PRESS START · baek19xx' },
       { label: '所在地', value: '韓国 京畿道' },
       { label: 'サービス形態', value: 'Webベースのロトシミュレーター' },
     ],

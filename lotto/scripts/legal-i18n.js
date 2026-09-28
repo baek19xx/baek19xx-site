@@ -31,7 +31,7 @@ const legalContent = {
   privacy: {
     ko: {
       eyebrow: 'PRIVACY POLICY',
-      title: 'Lux Lotto Studio 개인정보 처리방침',
+      title: 'PRESS START 개인정보 처리방침',
       intro: '사용자의 개인정보 보호를 최우선으로 하며, 최소한의 정보만을 안전하게 처리합니다.',
       sections: [
         {
@@ -92,7 +92,7 @@ const legalContent = {
     },
     en: {
       eyebrow: 'PRIVACY POLICY',
-      title: 'Lux Lotto Studio Privacy Policy',
+      title: 'PRESS START Privacy Policy',
       intro: 'We minimize data collection and keep every touchpoint transparent for your safety.',
       sections: [
         {
@@ -153,7 +153,7 @@ const legalContent = {
     },
     ja: {
       eyebrow: 'PRIVACY POLICY',
-      title: 'Lux Lotto Studio プライバシーポリシー',
+      title: 'PRESS START プライバシーポリシー',
       intro: '取得する情報を最小限に抑え、透明性の高い運用でユーザーの安全を守ります。',
       sections: [
         {
@@ -216,8 +216,8 @@ const legalContent = {
   terms: {
     ko: {
       eyebrow: 'TERMS OF USE',
-      title: 'Lux Lotto Studio 이용약관',
-      intro: '본 약관은 Lux Lotto Studio(이하 “본 서비스”)의 이용 조건과 책임을 규정합니다.',
+      title: 'PRESS START 이용약관',
+      intro: '본 약관은 PRESS START(이하 “본 서비스”)의 이용 조건과 책임을 규정합니다.',
       sections: [
         {
           heading: '1. 서비스 성격',
@@ -242,7 +242,7 @@ const legalContent = {
         {
           heading: '4. 지적 재산권',
           paragraphs: [
-            '애플리케이션에 포함된 텍스트, 그래픽, 코드, 로고 등 모든 저작물은 Lux Lotto Studio 또는 해당 권리자의 자산입니다. 사전 서면 동의 없이 복제·배포·상업적 이용을 할 수 없습니다.',
+            '애플리케이션에 포함된 텍스트, 그래픽, 코드, 로고 등 모든 저작물은 PRESS START 또는 해당 권리자의 자산입니다. 사전 서면 동의 없이 복제·배포·상업적 이용을 할 수 없습니다.',
           ],
         },
         {
@@ -276,8 +276,8 @@ const legalContent = {
     },
     en: {
       eyebrow: 'TERMS OF USE',
-      title: 'Lux Lotto Studio Terms of Use',
-      intro: 'These terms describe how you may use Lux Lotto Studio (“the Service”) and the responsibilities that apply.',
+      title: 'PRESS START Terms of Use',
+      intro: 'These terms describe how you may use PRESS START (“the Service”) and the responsibilities that apply.',
       sections: [
         {
           heading: '1. Nature of Service',
@@ -302,7 +302,7 @@ const legalContent = {
         {
           heading: '4. Intellectual Property',
           paragraphs: [
-            'All text, graphics, code, and logos within the Service are owned by Lux Lotto Studio or its licensors. Reproduction, distribution, or commercial use without prior written consent is prohibited.',
+            'All text, graphics, code, and logos within the Service are owned by PRESS START or its licensors. Reproduction, distribution, or commercial use without prior written consent is prohibited.',
           ],
         },
         {
@@ -336,8 +336,8 @@ const legalContent = {
     },
     ja: {
       eyebrow: 'TERMS OF USE',
-      title: 'Lux Lotto Studio 利用規約',
-      intro: '本規約は Lux Lotto Studio（以下「本サービス」）の利用条件と利用者の責任を定めるものです。',
+      title: 'PRESS START 利用規約',
+      intro: '本規約は PRESS START（以下「本サービス」）の利用条件と利用者の責任を定めるものです。',
       sections: [
         {
           heading: '1. サービスの性質',
@@ -362,7 +362,7 @@ const legalContent = {
         {
           heading: '4. 知的財産権',
           paragraphs: [
-            'サービス内のテキスト、グラフィック、コード、ロゴなどの著作物は Lux Lotto Studio または権利者に帰属します。事前の書面許可なく複製・配布・商用利用することはできません。',
+            'サービス内のテキスト、グラフィック、コード、ロゴなどの著作物は PRESS START または権利者に帰属します。事前の書面許可なく複製・配布・商用利用することはできません。',
           ],
         },
         {
@@ -398,8 +398,8 @@ const legalContent = {
   about: {
     ko: {
       eyebrow: 'ABOUT',
-      title: 'Lux Lotto Studio 소개',
-      intro: 'Lux Lotto Studio는 로또 추첨 과정을 물리 기반으로 재현한 교육·엔터테인먼트 시뮬레이터입니다.',
+      title: 'PRESS START 소개',
+      intro: 'PRESS START는 브라우저에서 바로 즐기는 미니게임과 물리 기반 로또 추첨 시뮬레이션을 제공하는 웹 콘텐츠 스튜디오입니다.',
       sections: [
         {
           heading: '1. 서비스 목적',
@@ -432,10 +432,10 @@ const legalContent = {
         {
           heading: '5. 운영 정보',
           list: [
-            '운영 주체: Lux Lotto Studio',
+            '운영 주체: PRESS START',
             '대표: baek19xx',
             '연락처: baek_10090@naver.com',
-            '서비스 형태: 웹 기반 로또 시뮬레이터',
+            '서비스 형태: 웹 기반 미니게임·시뮬레이션 포털',
           ],
         },
       ],
@@ -451,8 +451,8 @@ const legalContent = {
     },
     en: {
       eyebrow: 'ABOUT',
-      title: 'About Lux Lotto Studio',
-      intro: 'Lux Lotto Studio is a physics-inspired lottery draw simulator built for education and entertainment.',
+      title: 'About PRESS START',
+      intro: 'PRESS START is a web studio offering browser mini-games and a physics-inspired lottery draw simulator for education and entertainment.',
       sections: [
         {
           heading: '1. Purpose of the Service',
@@ -485,10 +485,10 @@ const legalContent = {
         {
           heading: '5. Operator Information',
           list: [
-            'Operator: Lux Lotto Studio',
+            'Operator: PRESS START',
             'Owner: baek19xx',
             'Contact: baek_10090@naver.com',
-            'Service Type: Web-based lottery simulator',
+            'Service Type: Browser-based mini-games and simulation portal',
           ],
         },
       ],
@@ -504,8 +504,8 @@ const legalContent = {
     },
     ja: {
       eyebrow: 'ABOUT',
-      title: 'Lux Lotto Studio について',
-      intro: 'Lux Lotto Studio は抽選の流れを物理的に再現する学習・エンタメ向けシミュレーターです。',
+      title: 'PRESS START について',
+      intro: 'PRESS START はブラウザで遊べるミニゲームと物理ベースの抽選シミュレーターを提供するウェブスタジオです。',
       sections: [
         {
           heading: '1. サービスの目的',
@@ -538,10 +538,10 @@ const legalContent = {
         {
           heading: '5. 運営情報',
           list: [
-            '運営: Lux Lotto Studio',
+            '運営: PRESS START',
             '代表: baek19xx',
             '連絡先: baek_10090@naver.com',
-            'サービス形態: Webベースのロトシミュレーター',
+            'サービス形態: ブラウザ型ミニゲーム・シミュレーションポータル',
           ],
         },
       ],
@@ -611,7 +611,7 @@ const legalContent = {
         {
           heading: '1. Age & Intent',
           paragraphs: [
-            'Lux Lotto Studio does not replace real lottery services. Users under 19 should explore it for educational purposes only, and all real-world purchases must satisfy local laws.',
+            'PRESS START does not replace real lottery services. Users under 19 should explore it for educational purposes only, and all real-world purchases must satisfy local laws.',
           ],
         },
         {
