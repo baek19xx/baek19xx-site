@@ -97,6 +97,7 @@
       const grid = document.getElementById(gridId);
       list.forEach((g) => {
         const card = document.createElement('a');
+        card.href = g.path;
         card.className = `cab ${g.color}` + (g.id === 'slime-survivors' ? ' featured' : '');
         card.innerHTML = `
           <div class="scr ${g.scr}">
