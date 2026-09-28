@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미니 게임 - PRESS START</title>
-  <meta name="description" content="간단한 미니 게임 모음 - 동전, 주사위, 가위바위보, 숫자 야구, 틱택토를 즐겨보세요." />
+  <title>게임 전체 목록 · PRESS START</title>
+  <meta name="description" content="PRESS START 게임 전체 목록 — 슬라임 서바이버즈, 럭스 로또 추첨기, 미니게임을 브라우저에서 바로 플레이하세요." />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -12,74 +12,117 @@
     gtag('js', new Date());
     gtag('config', 'G-WKK1PHMNVP');
   </script>
-  <link rel="stylesheet" href="./games-common.css" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../arcade.css" />
   <script src="./games-common.js" defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="logo" href="../">PRESS START</a>
-      <nav class="nav-links">
+  <a class="skip-link" href="#mainContent">본문 바로가기</a>
+  <div class="page-shell">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="../">PRESS<span class="ps-dot">&nbsp;START</span></a>
+        <nav class="topnav" aria-label="주요 메뉴">
+          <a href="../">홈</a>
+          <a href="./">게임 전체 목록</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="arcade-section" style="padding-top: 40px;">
+        <p class="sec-eyebrow c">GAME LIST</p>
+        <h2>게임 전체 목록</h2>
+        <p class="sec-desc">
+          오락실에 놓인 모든 기기입니다. 화면을 보고 마음에 드는 게임을 골라 START를 누르세요.
+          플레이 통계는 브라우저에만 저장됩니다.
+        </p>
+
+        <div class="today-pick">
+          <span class="tp-tag">TODAY'S PICK</span>
+          <p id="todayPickText">추천 게임을 불러오는 중...</p>
+          <a id="todayPickLink" class="tp-go" href="#">바로가기</a>
+        </div>
+      </section>
+
+      <section class="arcade-section" id="genre-action" aria-labelledby="actionHeading">
+        <p class="genre-tag c">GENRE : ACTION · SURVIVAL<span class="genre-count">1기종</span></p>
+        <h2 id="actionHeading" style="position:absolute;left:-9999px;">액션 · 서바이벌</h2>
+        <div class="floor" id="actionGrid"></div>
+      </section>
+
+      <section class="arcade-section" id="genre-mini" aria-labelledby="miniHeading">
+        <p class="genre-tag m">GENRE : MINI GAMES<span class="genre-count">6기종</span></p>
+        <h2 id="miniHeading" style="position:absolute;left:-9999px;">미니게임</h2>
+        <div class="floor" id="miniGrid"></div>
+      </section>
+
+      <section class="arcade-section" aria-labelledby="statsHeading">
+        <p class="sec-eyebrow y">RECORD</p>
+        <h2 id="statsHeading">내 플레이 통계</h2>
+        <article class="panel stats-panel" id="statsList">
+          <p>아직 플레이 기록이 없습니다.</p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p class="footer-brand">PRESS START</p>
+      <div class="footer-links" aria-label="푸터 탐색">
         <a href="../">홈</a>
-        <a href="./">게임 목록</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <h1>미니 게임 놀이터</h1>
-    <p class="subtitle">
-      잠깐씩 즐길 수 있는 간단한 게임 모음입니다. 플레이 통계는 브라우저에 저장되며, Google Analytics 이벤트로도 수집됩니다.
-    </p>
-
-    <div id="todayPick" class="game-card" style="margin-bottom: 1.5rem;">
-      <h3>오늘의 랜덤 추천</h3>
-      <p id="todayPickText">추천 게임을 불러오는 중...</p>
-      <a id="todayPickLink" class="play-btn" href="#">바로가기</a>
-    </div>
-
-    <h2>게임 목록</h2>
-    <div class="game-grid" id="gameGrid"></div>
-
-    <h2>내 플레이 통계</h2>
-    <div id="statsList" class="game-card" style="min-height: 120px;">
-      <p>아직 플레이 기록이 없습니다.</p>
-    </div>
-  </main>
-
-  <footer>
-    <p>&copy; 2026 PRESS START. All rights reserved.</p>
-  </footer>
+        <a href="../about.html">사이트 소개</a>
+        <a href="../privacy.html">개인정보 처리방침</a>
+        <a href="../terms.html">이용약관</a>
+        <a href="../responsible-play.html">건강한 이용 가이드</a>
+      </div>
+      <p class="footer-note">© <span id="footerYear">2026</span> PRESS START. All rights reserved.</p>
+    </footer>
+  </div>
 
   <script>
     const games = [
-      { id: 'slime-survivors', title: '슬라임 서바이버즈', desc: '몰려오는 몬스터 무리를 쓸어버리는 로그라이크 생존 액션!', path: './slime/' },
-      { id: 'coin-flip', title: '동전 던지기', desc: '앞면? 뒷면? 간단한 운명의 선택!', path: './coin-flip.html' },
-      { id: 'dice', title: '주사위 굴리기', desc: '1개부터 6개까지 원하는 만큼 굴려보세요.', path: './dice.html' },
-      { id: 'rock-paper-scissors', title: '가위바위보', desc: '컴퓨터와의 운명의 대결!', path: './rock-paper-scissors.html' },
-      { id: 'number-baseball', title: '숫자 야구', desc: '3자리 숫자를 맞춰보세요.', path: './number-baseball.html' },
-      { id: 'tic-tac-toe', title: '틱택토', desc: '컴퓨터 AI와 3x3 승부.', path: './tic-tac-toe.html' },
+      { id: 'slime-survivors', title: '슬라임 서바이버즈', desc: '몰려오는 몬스터 무리를 쓸어버리는 로그라이크 생존 액션!', path: './slime/', genre: 'action', tag: 'ACTION · SURVIVAL', icon: '👾', scr: 'slime', color: 'cyan', badge: 'NEW' },
+      { id: 'lux-lotto', title: '럭스 로또 추첨기', desc: '물리 엔진으로 튀어오르는 공에서 번호를 추첨하는 시뮬레이터.', path: '../lotto.html', genre: 'mini', tag: 'SIMULATION', icon: '🎱', scr: 'lotto', color: 'yellow' },
+      { id: 'coin-flip', title: '동전 던지기', desc: '앞면? 뒷면? 간단한 운명의 선택!', path: './coin-flip.html', genre: 'mini', tag: 'MINI', icon: '🪙', scr: 'coin', color: 'magenta' },
+      { id: 'dice', title: '주사위 굴리기', desc: '1개부터 6개까지 원하는 만큼 굴려보세요.', path: './dice.html', genre: 'mini', tag: 'MINI', icon: '🎲', scr: 'dice', color: 'green' },
+      { id: 'rock-paper-scissors', title: '가위바위보', desc: '컴퓨터와의 운명의 대결!', path: './rock-paper-scissors.html', genre: 'mini', tag: 'MINI', icon: '✊', scr: 'rps', color: 'violet' },
+      { id: 'number-baseball', title: '숫자 야구', desc: '3자리 숫자를 맞춰보세요.', path: './number-baseball.html', genre: 'mini', tag: 'MINI', icon: '⚾', scr: 'baseball', color: 'cyan' },
+      { id: 'tic-tac-toe', title: '틱택토', desc: '컴퓨터 AI와 3x3 승부.', path: './tic-tac-toe.html', genre: 'mini', tag: 'MINI', icon: '❌', scr: 'ttt', color: 'magenta' },
     ];
 
-    const grid = document.getElementById('gameGrid');
-    games.forEach((g) => {
-      const card = document.createElement('div');
-      card.className = 'game-card';
-      card.innerHTML = `
-        <h3>${g.title}</h3>
-        <p>${g.desc}</p>
-        <a class="play-btn" href="${g.path}">플레이</a>
-      `;
-      grid.appendChild(card);
-    });
+    function renderGames(gridId, list) {
+      const grid = document.getElementById(gridId);
+      list.forEach((g) => {
+        const card = document.createElement('a');
+        card.className = `cab ${g.color}` + (g.id === 'slime-survivors' ? ' featured' : '');
+        card.innerHTML = `
+          <div class="scr ${g.scr}">
+            <span class="scr-emoji">${g.icon}</span>
+            <span class="scr-label">${g.tag}</span>
+          </div>
+          <span class="cab-tag">${g.tag}</span>
+          <h3>${g.title}${g.badge ? `<span class="new-badge">${g.badge}</span>` : ''}</h3>
+          <p>${g.desc}</p>
+          <span class="cab-btn">▶ PLAY</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    renderGames('actionGrid', games.filter((g) => g.genre === 'action'));
+    renderGames('miniGrid', games.filter((g) => g.genre === 'mini'));
 
     const pick = games[Math.floor(Math.random() * games.length)];
-    document.getElementById('todayPickText').textContent = `${pick.title} - ${pick.desc}`;
+    document.getElementById('todayPickText').textContent = `${pick.title} — ${pick.desc}`;
     document.getElementById('todayPickLink').href = pick.path;
 
     if (window.MiniGame) {
       window.MiniGame.renderStatsList(document.getElementById('statsList'));
     }
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
