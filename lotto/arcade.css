@@ -147,6 +147,15 @@ a {
   border-radius: 6px;
   box-shadow: 0 0 22px rgba(0, 240, 255, 0.2);
 }
+/* invisible hover bridge so the menu doesn't close while moving the cursor down */
+.subnav::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: 10px;
+}
 .has-sub:hover .subnav,
 .has-sub:focus-within .subnav {
   display: flex;
