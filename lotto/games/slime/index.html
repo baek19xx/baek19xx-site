@@ -35,26 +35,31 @@
     </div>
     <aside class="gp-ad" id="adB"></aside>
     <script>
-      // Paste the AdSense display-unit slot id here to activate ads on
-      // this page (one unit can serve all three slots — left/right/bottom).
-      var AD_SLOT = '';
+      // AdSense display units for this page — one per position so
+      // per-slot stats stay separate. Leave a slot '' to disable it.
+      var AD_SLOTS = {
+        left: '2973704112',
+        right: '1175210785',
+        bottom: '8862129112',
+      };
       (function () {
-        if (!AD_SLOT) return;
+        var anySlot = AD_SLOTS.left || AD_SLOTS.right || AD_SLOTS.bottom;
+        if (!anySlot) return;
         var s = document.createElement('script');
         s.async = true;
         s.crossOrigin = 'anonymous';
         s.src =
           'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5668095080661070';
         document.head.appendChild(s);
-        function inject(el, format, width) {
-          if (!el) return;
+        function inject(el, format, width, slot) {
+          if (!el || !slot) return;
           var ins = document.createElement('ins');
           ins.className = 'adsbygoogle';
           ins.style.display = 'block';
           ins.style.width = width;
           ins.style.height = '100%';
           ins.setAttribute('data-ad-client', 'ca-pub-5668095080661070');
-          ins.setAttribute('data-ad-slot', AD_SLOT);
+          ins.setAttribute('data-ad-slot', slot);
           ins.setAttribute('data-ad-format', format);
           el.appendChild(ins);
           (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -62,10 +67,10 @@
         // Side rails only when the window is wide enough to spare 160px
         // per side without crushing the playfield.
         if (window.innerWidth >= 900) {
-          inject(document.getElementById('adL'), 'vertical', '160px');
-          inject(document.getElementById('adR'), 'vertical', '160px');
+          inject(document.getElementById('adL'), 'vertical', '160px', AD_SLOTS.left);
+          inject(document.getElementById('adR'), 'vertical', '160px', AD_SLOTS.right);
         }
-        inject(document.getElementById('adB'), 'horizontal', '100%');
+        inject(document.getElementById('adB'), 'horizontal', '100%', AD_SLOTS.bottom);
       })();
 
       // Fullscreen toggle — the stage element goes fullscreen so the
