@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>슬라임 아일 - PRESS START</title>
+    <!-- Google tag (gtag.js) — same property as the rest of the site -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKK1PHMNVP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-WKK1PHMNVP');
+    </script>
+    <!-- AdSense loader is injected by the AD_SLOT block at the bottom —
+         only when a slot id is configured, so Auto ads can't flood the
+         game page before manual units are in place. -->
+    <style>html,body{background:#0b0b12;height:100%;margin:0;padding:0}body{flex-direction:column;height:100dvh;font-family:Segoe UI,Malgun Gothic,sans-serif;display:flex}.gp-top{box-sizing:border-box;background:#120e24;border-bottom:1px solid #2a1f4d;flex:0 0 46px;align-items:center;gap:10px;height:46px;padding:0 12px;display:flex}.gp-back{color:#c2d4ee;white-space:nowrap;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;text-decoration:none;transition:background .15s}.gp-back:hover{color:#fff;background:#231646}.gp-title{text-align:center;letter-spacing:3px;color:#8f7ae0;text-overflow:ellipsis;white-space:nowrap;flex:1;font:700 13px/1 Trebuchet MS,Segoe UI,sans-serif;overflow:hidden}.gp-fs{cursor:pointer;color:#c2d4ee;white-space:nowrap;background:#1d1440;border:1px solid #3a2c66;border-radius:8px;padding:8px 12px;font:700 12px/1 Segoe UI,Malgun Gothic,sans-serif;transition:background .15s}.gp-fs:hover{color:#fff;background:#2c1d5e}.gp-vol{color:#c2d4ee;align-items:center;gap:6px;font-size:14px;display:flex}.gp-vol input[type=range]{accent-color:#8f7ae0;cursor:pointer;width:90px}.gp-stage{background:#000;flex:1;justify-content:center;align-items:stretch;min-height:0;display:flex;overflow:hidden}.gp-rail{background:#0d0a18;flex:0 0 160px}.gp-rail:empty{display:none}.gp-rail:first-child{border-right:1px solid #2a1f4d}.gp-rail:last-child{border-left:1px solid #2a1f4d}#game{aspect-ratio:16/9;justify-content:center;align-items:center;min-width:0;max-width:100%;height:100%;display:flex}#game:fullscreen{aspect-ratio:auto;background:#000;width:100%}.gp-ad{flex:none}.gp-ad:not(:empty){background:#0d0a18;border-top:1px solid #2a1f4d;justify-content:center;align-items:center;min-height:100px;display:flex}</style>
+    <script type="module" crossorigin src="./assets/index-48F1yW7F.js"></script>
+  </head>
+  <body>
+    <header class="gp-top">
+      <a class="gp-back" href="../">← 게임 목록</a>
+      <span class="gp-title">SLIME ISLE</span>
+      <div class="gp-vol">
+        <span id="volIco">🔊</span>
+        <input id="volSlider" type="range" min="0" max="100" value="100" aria-label="볼륨" />
+      </div>
+      <button class="gp-fs" id="fsBtn" type="button">⛶ 전체화면</button>
+    </header>
+    <main class="gp-stage" id="stage">
+      <aside class="gp-rail" id="adL"></aside>
+      <div id="game"></div>
+      <aside class="gp-rail" id="adR"></aside>
+    </main>
+    <aside class="gp-ad" id="adB"></aside>
+    <script>
+      // AdSense display units for this page — one per position so
+      // per-slot stats stay separate. Leave a slot '' to disable it.
+      var AD_SLOTS = {
+        left: '2973704112',
+        right: '1175210785',
+        bottom: '8862129112',
+      };
+      (function () {
+        var anySlot = AD_SLOTS.left || AD_SLOTS.right || AD_SLOTS.bottom;
+        if (!anySlot) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.crossOrigin = 'anonymous';
+        s.src =
+          'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5668095080661070';
+        document.head.appendChild(s);
+        function inject(el, format, width, height, slot) {
+          if (!el || !slot) return;
+          var ins = document.createElement('ins');
+          ins.className = 'adsbygoogle';
+          ins.style.display = 'block';
+          ins.style.width = width + 'px';
+          ins.style.height = height + 'px';
+          ins.setAttribute('data-ad-client', 'ca-pub-5668095080661070');
+          ins.setAttribute('data-ad-slot', slot);
+          ins.setAttribute('data-ad-format', format);
+          el.appendChild(ins);
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        }
+        // Side rails only when the window is wide enough to spare 160px
+        // per side without crushing the playfield.
+        if (window.innerWidth >= 900) {
+          inject(document.getElementById('adL'), 'vertical', '160px', '100%', AD_SLOTS.left);
+          inject(document.getElementById('adR'), 'vertical', '160px', '100%', AD_SLOTS.right);
+        }
+        // Bottom: a fixed 728×90 leaderboard box on wide screens — the
+        // flex strip centers it — and fluid width on narrow screens.
+        if (window.innerWidth >= 760) {
+          inject(document.getElementById('adB'), 'horizontal', '728px', '90px', AD_SLOTS.bottom);
+        } else {
+          inject(document.getElementById('adB'), 'horizontal', '100%', '60px', AD_SLOTS.bottom);
+        }
+      })();
+
+      // Fullscreen toggle — the game element alone goes fullscreen so
+      // the ad rails stay outside the fullscreen view.
+      // Volume slider — talks to the game's audio engine once the bundle
+      // exposes window.SlimeAudio; mirrors the in-game M/-/= keys back.
+      var volSlider = document.getElementById('volSlider');
+      var volIco = document.getElementById('volIco');
+      function syncVol() {
+        var A = window.SlimeAudio;
+        if (!A) return;
+        volSlider.value = Math.round(A.volume * 100);
+        volIco.textContent = A.muted || A.volume === 0 ? '🔇' : '🔊';
+      }
+      volSlider.addEventListener('input', function () {
+        var A = window.SlimeAudio;
+        if (A) A.setVolume(this.value / 100);
+      });
+      window.addEventListener('slime-audio-change', syncVol);
+      var volPoll = setInterval(function () {
+        if (window.SlimeAudio) {
+          clearInterval(volPoll);
+          syncVol();
+        }
+      }, 300);
+
+      document.getElementById('fsBtn').addEventListener('click', function () {
+        var game = document.getElementById('game');
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if (game.requestFullscreen) game.requestFullscreen();
+      });
+    </script>
+    <script src="../games-common.js" defer></script>
+    <script defer>
+      window.addEventListener('load', function () {
+        if (window.MiniGame) window.MiniGame.track('슬라임 아일', 'play');
+      });
+    </script>
+  </body>
+</html>
